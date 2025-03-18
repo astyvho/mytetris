@@ -63,7 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     controlToggleBtn.addEventListener('click', () => {
         isMobileControl = !isMobileControl;
-        mobileControls.style.display = isMobileControl ? 'flex' : 'none';
+        const controlPanel = document.querySelector('.control-panel');
+        controlPanel.style.display = isMobileControl ? 'flex' : 'none';
         controlToggleBtn.textContent = isMobileControl ? '키보드 컨트롤' : '모바일 컨트롤';
         
         if (isMobileControl) {
@@ -74,7 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 초기 상태 설정
-    mobileControls.style.display = 'none';
+    const controlPanel = document.querySelector('.control-panel');
+    controlPanel.style.display = 'none';
     document.addEventListener('keydown', handleKeyDown);
 
     // 시작 버튼 이벤트 리스너
@@ -626,20 +628,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // viewport 높이 설정 함수
     function setViewportHeight() {
+        // 모바일 브라우저에서 100vh 문제 해결
         let vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
+        
+        // iOS Safari에서 주소창 높이 계산
+        setTimeout(() => {
+            // 두 번 계산하여 주소창이 숨겨진 경우도 대응
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+            
+            // 레이아웃 재조정
+            resizeCanvas();
+        }, 100);
     }
 
     // 초기 viewport 높이 설정
     setViewportHeight();
 
     // 화면 크기가 변경될 때마다 viewport 높이 다시 계산
-    window.addEventListener('resize', () => {
-        setViewportHeight();
-    });
+    window.addEventListener('resize', setViewportHeight);
 
     // 모바일 기기에서 방향이 변경될 때도 viewport 높이 다시 계산
     window.addEventListener('orientationchange', () => {
+        setTimeout(setViewportHeight, 300);
+    });
+    
+    // 스크롤 시에도 높이 재계산 (iOS Safari의 주소창 숨김에 대응)
+    window.addEventListener('scroll', () => {
         setTimeout(setViewportHeight, 100);
     });
 
@@ -651,4 +667,99 @@ document.addEventListener('DOMContentLoaded', () => {
     function createBoard() {
         return Array(ROWS).fill().map(() => Array(COLS).fill(0));
     }
+
+    // 버튼에 이벤트 리스너 추가 부분 찾기
+    // 아래는 이벤트 리스너를 추가하는 예시 코드입니다.
+    // 실제 코드는 다를 수 있으므로 tetris.js의 내용에 맞게 조정해야 합니다.
+
+    // 시작 버튼 이벤트 리스너
+    document.getElementById('start-button').addEventListener('click', function() {
+        startGame();
+    });
+    document.getElementById('start-button').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        startGame();
+    }, { passive: false });
+
+    // 일시정지 버튼 이벤트 리스너
+    document.getElementById('pause-button').addEventListener('click', function() {
+        pauseGame();
+    });
+    document.getElementById('pause-button').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        pauseGame();
+    }, { passive: false });
+
+    // 키보드 컨트롤 토글 버튼 이벤트 리스너
+    document.getElementById('control-toggle').addEventListener('click', function() {
+        toggleControls();
+    });
+    document.getElementById('control-toggle').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        toggleControls();
+    }, { passive: false });
+
+    // 왼쪽 버튼 이벤트 리스너
+    document.getElementById('left-btn').addEventListener('click', function() {
+        moveLeft();
+    });
+    document.getElementById('left-btn').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        moveLeft();
+    }, { passive: false });
+
+    // 아래 버튼 이벤트 리스너
+    document.getElementById('down-btn').addEventListener('click', function() {
+        moveDown();
+    });
+    document.getElementById('down-btn').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        moveDown();
+    }, { passive: false });
+
+    // 오른쪽 버튼 이벤트 리스너
+    document.getElementById('right-btn').addEventListener('click', function() {
+        moveRight();
+    });
+    document.getElementById('right-btn').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        moveRight();
+    }, { passive: false });
+
+    // 회전 버튼 이벤트 리스너
+    document.getElementById('rotate-btn').addEventListener('click', function() {
+        rotate();
+    });
+    document.getElementById('rotate-btn').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        rotate();
+    }, { passive: false });
+
+    // 즉시 내리기 버튼 이벤트 리스너
+    document.getElementById('drop-btn').addEventListener('click', function() {
+        hardDrop();
+    });
+    document.getElementById('drop-btn').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        hardDrop();
+    }, { passive: false });
+
+    // iOS 터치 이벤트 처리 개선
+    document.addEventListener('DOMContentLoaded', function() {
+        // 모든 버튼에 터치 이벤트 설정
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.addEventListener('touchstart', function(e) {
+                // 터치 이벤트가 발생하면 해당 버튼에 active 클래스 추가
+                this.classList.add('active');
+                // 기본 동작 방지
+                e.preventDefault();
+            }, { passive: false });
+            
+            button.addEventListener('touchend', function() {
+                // 터치 이벤트가 끝나면 active 클래스 제거
+                this.classList.remove('active');
+            });
+        });
+    });
 }); 

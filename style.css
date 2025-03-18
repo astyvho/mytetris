@@ -279,7 +279,9 @@ button:hover {
     
     .control-buttons button {
         font-size: 14px;
-        padding: 12px 5px;
+        padding: 8px 5px;
+        height: auto;
+        width: auto;
     }
     
     .control-panel {
@@ -295,27 +297,27 @@ button:hover {
     }
     
     .arrow-controls button {
-        width: 70px;
-        height: 70px;
-        font-size: 24px;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
         background-color: #4CAF50 !important;
-        border: 3px solid rgba(255, 255, 255, 0.5);
+        border: 2px solid rgba(255, 255, 255, 0.3);
     }
     
     #rotate-btn {
-        width: 80px;
-        height: 60px;
+        width: 60px;
+        height: 50px;
         font-size: 16px;
         background-color: #FF9800 !important;
-        border: 3px solid rgba(255, 255, 255, 0.5);
+        border: 2px solid rgba(255, 255, 255, 0.3);
     }
     
     #drop-btn {
-        width: 80%;
-        height: 50px;
+        width: 70%;
+        height: 40px;
         font-size: 16px;
         background-color: #f44336 !important;
-        border: 3px solid rgba(255, 255, 255, 0.5);
+        border: 2px solid rgba(255, 255, 255, 0.3);
     }
 }
 
@@ -325,42 +327,49 @@ button:hover {
         -webkit-appearance: none !important;
         appearance: none !important;
         background-color: inherit !important;
+        pointer-events: auto !important;
     }
     
     .arrow-controls button {
         background-color: #4CAF50 !important;
         -webkit-appearance: none !important;
         appearance: none !important;
+        pointer-events: auto !important;
     }
     
     #rotate-btn {
         background-color: #FF9800 !important;
         -webkit-appearance: none !important;
         appearance: none !important;
+        pointer-events: auto !important;
     }
     
     #drop-btn {
         background-color: #f44336 !important;
         -webkit-appearance: none !important;
         appearance: none !important;
+        pointer-events: auto !important;
     }
     
     #start-button {
         background-color: #4CAF50 !important;
         -webkit-appearance: none !important;
         appearance: none !important;
+        pointer-events: auto !important;
     }
     
     #pause-button {
         background-color: #f44336 !important;
         -webkit-appearance: none !important;
         appearance: none !important;
+        pointer-events: auto !important;
     }
     
     #control-toggle {
         background-color: #4CAF50 !important;
         -webkit-appearance: none !important;
         appearance: none !important;
+        pointer-events: auto !important;
     }
     
     .container {

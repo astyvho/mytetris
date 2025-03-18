@@ -17,6 +17,8 @@
             -webkit-appearance: none !important;
             appearance: none !important;
             border-radius: 4px !important;
+            pointer-events: auto !important;
+            cursor: pointer !important;
         }
         .arrow-controls button {
             background-color: #4CAF50 !important;
@@ -68,19 +70,19 @@
             </div>
             
             <div class="control-buttons">
-                <button id="start-button" style="background-color: #4CAF50 !important; -webkit-appearance: none;">재시작</button>
-                <button id="pause-button" style="background-color: #f44336 !important; -webkit-appearance: none;">일시정지</button>
-                <button id="control-toggle" style="background-color: #4CAF50 !important; -webkit-appearance: none;">키보드 컨트롤</button>
+                <button id="start-button" style="background-color: #4CAF50 !important; -webkit-appearance: none; pointer-events: auto !important;">재시작</button>
+                <button id="pause-button" style="background-color: #f44336 !important; -webkit-appearance: none; pointer-events: auto !important;">일시정지</button>
+                <button id="control-toggle" style="background-color: #4CAF50 !important; -webkit-appearance: none; pointer-events: auto !important;">키보드 컨트롤</button>
             </div>
             
             <div class="control-panel">
                 <div class="arrow-controls">
-                    <button id="left-btn" style="background-color: #4CAF50 !important; -webkit-appearance: none;">←</button>
-                    <button id="down-btn" style="background-color: #4CAF50 !important; -webkit-appearance: none;">↓</button>
-                    <button id="right-btn" style="background-color: #4CAF50 !important; -webkit-appearance: none;">→</button>
+                    <button id="left-btn" style="background-color: #4CAF50 !important; -webkit-appearance: none; pointer-events: auto !important;">←</button>
+                    <button id="down-btn" style="background-color: #4CAF50 !important; -webkit-appearance: none; pointer-events: auto !important;">↓</button>
+                    <button id="right-btn" style="background-color: #4CAF50 !important; -webkit-appearance: none; pointer-events: auto !important;">→</button>
                 </div>
-                <button id="rotate-btn" style="background-color: #FF9800 !important; -webkit-appearance: none;">회전</button>
-                <button id="drop-btn" style="background-color: #f44336 !important; -webkit-appearance: none;">즉시 내리기</button>
+                <button id="rotate-btn" style="background-color: #FF9800 !important; -webkit-appearance: none; pointer-events: auto !important;">회전</button>
+                <button id="drop-btn" style="background-color: #f44336 !important; -webkit-appearance: none; pointer-events: auto !important;">즉시 내리기</button>
             </div>
         </div>
     </div>
