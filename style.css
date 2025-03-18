@@ -189,18 +189,24 @@ button:hover {
     padding: 0;
     font-size: 18px;
     background-color: var(--green-btn-color);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 #rotate-btn {
     width: 60px;
     height: 50px;
     background-color: var(--orange-btn-color);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 #drop-btn {
     width: 140px;
     height: 40px;
     background-color: var(--red-btn-color);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 /* 모바일 대응 */
@@ -232,47 +238,70 @@ button:hover {
     
     .next-block-container {
         position: static;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
-        justify-content: space-between;
         width: 100%;
         margin-top: 10px;
+        text-align: center;
+    }
+    
+    .next-block-title {
+        margin-bottom: 5px;
     }
     
     .next-block {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
     }
     
     .control-buttons {
         position: static;
         width: 100%;
-        flex-direction: row;
-        justify-content: space-between;
-        margin-top: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+        margin: 15px 0;
     }
     
     .control-buttons button {
-        flex: 1;
-        font-size: 12px;
-        padding: 8px 5px;
+        font-size: 14px;
+        padding: 12px 5px;
+    }
+    
+    .control-panel {
+        margin-top: 15px;
+        gap: 15px;
+        width: 100%;
+    }
+    
+    .arrow-controls {
+        width: 100%;
+        justify-content: center;
+        gap: 10px;
     }
     
     .arrow-controls button {
-        width: 45px;
-        height: 45px;
-        font-size: 16px;
+        width: 70px;
+        height: 70px;
+        font-size: 24px;
+        background-color: var(--green-btn-color);
+        border: 3px solid rgba(255, 255, 255, 0.5);
     }
     
     #rotate-btn {
-        width: 55px;
-        height: 45px;
+        width: 80px;
+        height: 60px;
+        font-size: 16px;
+        background-color: var(--orange-btn-color);
+        border: 3px solid rgba(255, 255, 255, 0.5);
     }
     
     #drop-btn {
-        width: 130px;
-        height: 35px;
-        font-size: 13px;
+        width: 80%;
+        height: 50px;
+        font-size: 16px;
+        background-color: var(--red-btn-color);
+        border: 3px solid rgba(255, 255, 255, 0.5);
     }
 }
 
@@ -295,35 +324,105 @@ button:hover {
         align-items: flex-start;
         gap: 15px;
         justify-content: center;
+        padding: 5px;
     }
     
     .game-area {
         flex: 0 0 auto;
         margin-top: 0;
-        padding: 0 130px 0 0; /* 가로 모드에서도 우측 여백 유지 */
+        padding: 0 20px; /* 가로 모드에서 여백 축소 */
     }
     
     .game-board {
-        left: -20px; /* 가로 모드에서도 왼쪽으로 약간 이동 */
+        left: 0; /* 가로 모드에서는 중앙 정렬 */
         margin-bottom: 15px;
+        width: 240px; /* 가로 모드에서는 게임 보드 크기 축소 */
+        height: 480px;
     }
     
     .game-info {
-        position: relative;
-        left: 0;
-        top: 0;
+        position: absolute;
+        left: 10px;
+        top: 10px;
         flex-direction: column;
-        width: 120px;
+        width: auto;
         gap: 5px;
+        font-size: 12px;
     }
     
     .next-block-container {
         position: absolute;
         right: 10px;
+        top: 10px;
+        width: 80px;
+    }
+    
+    .next-block {
+        width: 80px;
+        height: 80px;
     }
     
     .control-buttons {
         position: absolute;
         right: 10px;
+        top: 120px;
+        display: flex;
+        flex-direction: column;
+        width: 100px;
+        gap: 5px;
+    }
+    
+    .control-panel {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        width: 240px;
+    }
+    
+    .arrow-controls button {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+    }
+    
+    #rotate-btn {
+        width: 60px;
+        height: 50px;
+    }
+    
+    #drop-btn {
+        width: 160px;
+        height: 40px;
+    }
+}
+
+/* 매우 작은 화면 대응 */
+@media (max-width: 360px) {
+    .game-board {
+        width: 240px;
+        height: 480px;
+    }
+    
+    .next-block {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .arrow-controls button {
+        width: 60px;
+        height: 60px;
+        font-size: 20px;
+    }
+    
+    #rotate-btn {
+        width: 70px;
+        height: 50px;
+    }
+    
+    #drop-btn {
+        width: 70%;
+        height: 45px;
     }
 } 
