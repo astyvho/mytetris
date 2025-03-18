@@ -100,18 +100,8 @@ canvas {
     font-size: 20px;
 }
 
-.next-piece {
-    background-color: #f8f8f8;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    margin-bottom: 5px;
-}
-
-.next-piece h3 {
-    margin: 0 0 10px 0;
-    color: #333;
-    font-size: clamp(14px, 2.5vw, 16px);
+.next-piece, #next-canvas {
+    display: none !important;
 }
 
 .controls {

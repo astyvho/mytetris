@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let paused = false;
     let requestId = null;
     let time = { start: 0, elapsed: 0, level: LEVEL_SPEEDS[1] };
-    let nextPiece = null;
     let p = null;  // 현재 블록 변수 추가
 
     // DOM 요소
@@ -176,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 게임 보드 생성
     function createBoard() {
-        return Array.from({ length: ROWS }, () => Array(COLS).fill(0));
+        return Array(ROWS).fill().map(() => Array(COLS).fill(0));
     }
 
     // 게임 초기화
@@ -188,9 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gameOver = false;
         paused = false;
         time = { start: 0, elapsed: 0, level: LEVEL_SPEEDS[1] };
-        nextPiece = getRandomPiece();
-        p = getNextPiece();
-        drawNext();
+        p = getRandomPiece();
         updateScore();
         drawBoard();
         p.draw();
@@ -221,6 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cancelAnimationFrame(requestId);
         }
         animate();
+        startBtn.textContent = '재시작';
     }
 
     // 게임 오버
@@ -239,6 +237,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 애니메이션 루프
     function animate(now = 0) {
+        if (gameOver || paused) {
+            cancelAnimationFrame(requestId);
+            requestId = null;
+            return;
+        }
+
         time.elapsed = now - time.start;
         if (time.elapsed > time.level) {
             time.start = now;
@@ -249,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gameOverFunc();
                     return;
                 }
-                p = getNextPiece();
+                p = getRandomPiece();
             }
         }
 
@@ -353,14 +357,15 @@ document.addEventListener('DOMContentLoaded', () => {
         constructor(shape, ctx) {
             this.shape = shape;
             this.ctx = ctx;
-            this.x = 3;
+            this.x = Math.floor(COLS / 2) - Math.floor(shape[0].length / 2);  // 중앙에서 시작
             this.y = 0;
         }
 
         draw() {
+            const value = this.shape[0].find(v => v > 0) || 1;  // 블록 색상 값 찾기
             this.shape.forEach((row, y) => {
-                row.forEach((value, x) => {
-                    if (value > 0) {
+                row.forEach((cell, x) => {
+                    if (cell > 0) {
                         this.ctx.fillStyle = COLORS[value];
                         this.ctx.fillRect(this.x + x, this.y + y, 1, 1);
                         this.ctx.strokeStyle = 'white';
@@ -431,29 +436,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 랜덤 조각 생성
+    // 새로운 조각 가져오기
     function getRandomPiece() {
-        const pieceType = Math.floor(Math.random() * 7) + 1;
-        return new Piece(SHAPES[pieceType], ctx);
-    }
-
-    // 다음 조각 그리기
-    function drawNext() {
-        if (!nextPiece) return;
-        
-        // 모바일 화면에서는 다음 블록 미리보기 비활성화
-        if (window.innerWidth <= 768) return;
-        
-        nextCtx.clearRect(0, 0, 4, 4);
-        nextPiece.draw(nextCtx);
-    }
-
-    // 다음 조각 가져오기
-    function getNextPiece() {
-        const piece = nextPiece || getRandomPiece();
-        nextPiece = getRandomPiece();
-        drawNext();
-        return piece;
+        const pieces = [1, 2, 3, 4, 5, 6, 7];  // 1부터 7까지의 숫자로 변경
+        const piece = pieces[Math.floor(Math.random() * pieces.length)];
+        return new Piece(SHAPES[piece], ctx);
     }
 
     // 레벨업 처리
