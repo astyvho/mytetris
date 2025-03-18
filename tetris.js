@@ -49,7 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let paused = false;
     let requestId = null;
     let time = { start: 0, elapsed: 0, level: LEVEL_SPEEDS[1] };
-    let nextPiece = null;  // 다음 블록 저장 변수 추가
+    let nextPiece = null;
+    let p = null;  // 현재 블록 변수 추가
 
     // DOM 요소
     const canvas = document.getElementById('board');
@@ -85,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
         
         // 다음 블록 캔버스 크기 설정
-        const nextCanvas = document.getElementById('next-canvas');
         nextCanvas.width = 100;
         nextCanvas.height = 100;
         
@@ -203,10 +203,14 @@ document.addEventListener('DOMContentLoaded', () => {
         level = 1;
         lines = 0;
         gameOver = false;
+        paused = false;
         time = { start: 0, elapsed: 0, level: LEVEL_SPEEDS[1] };
-        nextPiece = getRandomPiece();  // 다음 블록 초기화
-        drawNext();  // 다음 블록 그리기
+        nextPiece = getRandomPiece();
+        p = getNextPiece();
+        drawNext();
         updateScore();
+        drawBoard();
+        p.draw();
     }
 
     // 점수 업데이트
@@ -226,6 +230,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 게임 플레이
     function play() {
+        if (gameOver) {
+            resetGame();
+        }
         time.start = performance.now();
         if (requestId) {
             cancelAnimationFrame(requestId);
@@ -263,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.clearRect(0, 0, COLS, ROWS);
         drawBoard();
         p.draw();
         requestId = requestAnimationFrame(animate);
@@ -492,9 +499,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 게임 시작
-    let p = null;
+    // 초기 게임 설정
     resetGame();
-    p = getNextPiece();
     drawBoard();
 }); 
