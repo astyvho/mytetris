@@ -60,6 +60,7 @@ body {
     background-color: #eaeaea;
     border-radius: 5px;
     font-weight: bold;
+    z-index: 10; /* 항상 최상위에 표시 */
 }
 
 /* 게임 영역 */
@@ -188,25 +189,31 @@ button:hover {
     height: 50px;
     padding: 0;
     font-size: 18px;
-    background-color: var(--green-btn-color);
-    color: white;
+    background-color: #4CAF50 !important; /* 강제 적용 */
+    color: white !important;
     border: 2px solid rgba(255, 255, 255, 0.3);
+    -webkit-appearance: none; /* iOS 기본 스타일 제거 */
+    appearance: none;
 }
 
 #rotate-btn {
     width: 60px;
     height: 50px;
-    background-color: var(--orange-btn-color);
-    color: white;
+    background-color: #FF9800 !important; /* 강제 적용 */
+    color: white !important;
     border: 2px solid rgba(255, 255, 255, 0.3);
+    -webkit-appearance: none; /* iOS 기본 스타일 제거 */
+    appearance: none;
 }
 
 #drop-btn {
     width: 140px;
     height: 40px;
-    background-color: var(--red-btn-color);
-    color: white;
+    background-color: #f44336 !important; /* 강제 적용 */
+    color: white !important;
     border: 2px solid rgba(255, 255, 255, 0.3);
+    -webkit-appearance: none; /* iOS 기본 스타일 제거 */
+    appearance: none;
 }
 
 /* 모바일 대응 */
@@ -218,6 +225,7 @@ button:hover {
     .game-area {
         padding: 0; /* 모바일에서는 패딩 제거 */
         width: 100%;
+        margin-top: 50px; /* 상단에 게임 정보 영역을 위한 여백 추가 */
     }
     
     .game-board {
@@ -226,14 +234,13 @@ button:hover {
     }
     
     .game-info {
-        position: relative;
-        left: 0;
-        top: 0;
+        position: absolute; /* 항상 절대 위치 유지 */
+        left: 10px;
+        top: 10px;
         font-size: 14px;
         gap: 5px;
         padding: 8px;
-        margin-bottom: 10px;
-        width: 100%;
+        width: auto; /* 너비 자동 조정 */
     }
     
     .next-block-container {
@@ -284,7 +291,7 @@ button:hover {
         width: 70px;
         height: 70px;
         font-size: 24px;
-        background-color: var(--green-btn-color);
+        background-color: #4CAF50 !important;
         border: 3px solid rgba(255, 255, 255, 0.5);
     }
     
@@ -292,7 +299,7 @@ button:hover {
         width: 80px;
         height: 60px;
         font-size: 16px;
-        background-color: var(--orange-btn-color);
+        background-color: #FF9800 !important;
         border: 3px solid rgba(255, 255, 255, 0.5);
     }
     
@@ -300,7 +307,7 @@ button:hover {
         width: 80%;
         height: 50px;
         font-size: 16px;
-        background-color: var(--red-btn-color);
+        background-color: #f44336 !important;
         border: 3px solid rgba(255, 255, 255, 0.5);
     }
 }
@@ -324,7 +331,7 @@ button:hover {
         align-items: flex-start;
         gap: 15px;
         justify-content: center;
-        padding: 5px;
+        padding: 5px 5px 5px 80px; /* 왼쪽에 게임 정보를 위한 공간 확보 */
     }
     
     .game-area {
@@ -348,6 +355,7 @@ button:hover {
         width: auto;
         gap: 5px;
         font-size: 12px;
+        background-color: rgba(234, 234, 234, 0.9); /* 약간 투명하게 */
     }
     
     .next-block-container {
@@ -385,16 +393,19 @@ button:hover {
         width: 50px;
         height: 50px;
         font-size: 18px;
+        background-color: #4CAF50 !important;
     }
     
     #rotate-btn {
         width: 60px;
         height: 50px;
+        background-color: #FF9800 !important;
     }
     
     #drop-btn {
         width: 160px;
         height: 40px;
+        background-color: #f44336 !important;
     }
 }
 
