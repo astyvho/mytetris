@@ -189,19 +189,26 @@ button:hover {
     .container {
         padding: 3px;
         height: 100%;
-        justify-content: space-between;
+        justify-content: flex-start;
+        gap: 5px;
     }
 
     .game-board {
-        flex: 1;
-        max-height: 70vh;
-        margin: 10px 0;
+        flex: 0 1 auto;
+        max-height: 60vh;
+        margin: 5px 0;
+        width: 85%;
     }
     
     .game-info {
         margin: 3px 0;
         gap: 3px;
         padding-top: env(safe-area-inset-top);
+        font-size: clamp(10px, 2.5vw, 14px);
+    }
+
+    .score-container {
+        padding: 5px 8px;
     }
     
     .controls {
@@ -209,13 +216,34 @@ button:hover {
         gap: 3px;
     }
 
+    .controls button {
+        padding: 5px 10px;
+        font-size: clamp(10px, 2.5vw, 14px);
+        min-width: 60px;
+    }
+
     .mobile-controls {
-        margin-top: auto;
+        margin-top: 5px;
         padding-bottom: env(safe-area-inset-bottom);
     }
 
     .control-row {
         margin: 2px 0;
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .control-row button {
+        width: clamp(30px, 7vw, 40px);
+        height: clamp(30px, 7vw, 40px);
+        font-size: clamp(14px, 2.5vw, 18px);
+    }
+
+    #drop-btn {
+        width: clamp(90px, 20vw, 120px);
+        padding: 5px;
+        font-size: clamp(12px, 2.5vw, 16px);
     }
 }
 
@@ -295,13 +323,21 @@ button:hover {
     }
     
     @media (max-width: 768px) {
+        .container {
+            padding-top: max(5px, env(safe-area-inset-top));
+        }
+        
+        .game-info {
+            padding-top: 0;
+        }
+        
         .game-board {
-            margin: 5px 0;
+            margin: 3px 0;
         }
         
         .mobile-controls {
-            margin-top: auto;
-            padding-bottom: max(10px, env(safe-area-inset-bottom));
+            margin-top: 3px;
+            padding-bottom: max(5px, env(safe-area-inset-bottom));
         }
     }
 } 
