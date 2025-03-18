@@ -15,10 +15,8 @@ body {
     background-color: #f0f0f0;
     touch-action: none;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    position: fixed;
     width: 100%;
-    top: 0;
-    left: 0;
+    overflow-x: hidden;
 }
 
 .container {
@@ -29,7 +27,7 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 5px;
-    height: 100vh;
+    min-height: 100vh;
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
 }
@@ -188,11 +186,10 @@ button:hover {
     
     .container {
         padding: 3px;
-        height: 90%;
+        height: 100%;
         justify-content: flex-start;
         gap: 4px;
-        transform: scale(0.9);
-        transform-origin: top center;
+        transform: none;
     }
 
     .game-board {
