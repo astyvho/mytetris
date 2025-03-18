@@ -530,6 +530,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // 화면 크기 변경 시 캔버스 크기 조정
     window.addEventListener('resize', resizeCanvas);
 
+    // viewport 높이 설정 함수
+    function setViewportHeight() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+
+    // 초기 viewport 높이 설정
+    setViewportHeight();
+
+    // 화면 크기가 변경될 때마다 viewport 높이 다시 계산
+    window.addEventListener('resize', () => {
+        setViewportHeight();
+    });
+
+    // 모바일 기기에서 방향이 변경될 때도 viewport 높이 다시 계산
+    window.addEventListener('orientationchange', () => {
+        setTimeout(setViewportHeight, 100);
+    });
+
     // 초기 게임 설정
     resetGame();
     drawBoard();
