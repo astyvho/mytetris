@@ -70,81 +70,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const downBtn = document.getElementById('down-btn');
     const dropBtn = document.getElementById('drop-btn');
 
-    // 캔버스 크기 설정
-    function resizeCanvas() {
-        // 화면 크기 가져오기
-        const screenWidth = window.innerWidth;
-        const screenHeight = window.innerHeight;
+    // 모바일 컨트롤 토글
+    let isMobileControl = false;
+    const nextPieceElement = document.querySelector('.next-piece');
+    
+    controlToggleBtn.addEventListener('click', () => {
+        isMobileControl = !isMobileControl;
+        mobileControls.classList.toggle('active');
+        nextPieceElement.classList.toggle('show', !isMobileControl);
+        controlToggleBtn.textContent = isMobileControl ? '키보드 컨트롤' : '모바일 컨트롤';
         
-        // 게임 보드 요소 가져오기
-        const gameBoard = document.querySelector('.game-board');
-        const container = document.querySelector('.container');
-        const gameInfo = document.querySelector('.game-info');
-        const controls = document.querySelector('.controls');
-        const nextPiece = document.querySelector('.next-piece');
-        
-        // 컨테이너 패딩과 여백 계산
-        const containerPadding = 20;
-        const elementMargin = 10;
-        const totalMargins = containerPadding * 2 + elementMargin * 4; // 상하 패딩 + 요소들 간의 마진
-        
-        // 게임 정보, 컨트롤, 다음 블록 영역의 예상 높이
-        const otherElementsHeight = gameInfo.offsetHeight + controls.offsetHeight + nextPiece.offsetHeight + totalMargins;
-        
-        // 사용 가능한 최대 높이 계산
-        const availableHeight = screenHeight - otherElementsHeight;
-        
-        // 게임 보드의 크기 계산 (2:1 비율 유지)
-        let boardHeight = Math.min(availableHeight * 0.95, screenHeight * 0.7);
-        let boardWidth = boardHeight / 2;
-        
-        // 화면 너비를 초과하지 않도록 조정
-        if (boardWidth > screenWidth * 0.95) {
-            boardWidth = screenWidth * 0.95;
-            boardHeight = boardWidth * 2;
+        // 모바일 컨트롤 활성화 시 키보드 이벤트 비활성화
+        if (isMobileControl) {
+            document.removeEventListener('keydown', handleKeyDown);
+            nextPieceElement.style.display = 'none';
+        } else {
+            document.addEventListener('keydown', handleKeyDown);
+            nextPieceElement.style.display = 'block';
         }
-        
-        // 게임 보드 스타일 설정
-        gameBoard.style.width = `${boardWidth}px`;
-        gameBoard.style.height = `${boardHeight}px`;
-        
-        // 캔버스 크기 설정
-        canvas.width = boardWidth;
-        canvas.height = boardHeight;
-        BLOCK_SIZE = boardWidth / COLS;
-        
-        // 컨텍스트 초기화
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
-        
-        // 다음 블록 캔버스 크기 설정
-        const nextBlockSize = Math.min(boardWidth * 0.3, 100);
-        nextCanvas.width = nextBlockSize;
-        nextCanvas.height = nextBlockSize;
-        
-        // 다음 블록 컨텍스트 초기화
-        nextCtx.setTransform(1, 0, 0, 1, 0, 0);
-        nextCtx.scale(nextBlockSize/4, nextBlockSize/4);
-        
-        // 게임 보드 다시 그리기
-        if (p) {
-            drawBoard();
-            p.draw();
+    });
+
+    // 초기 상태 설정
+    nextPieceElement.classList.add('show');
+
+    // 키보드 이벤트 핸들러
+    function handleKeyDown(event) {
+        if (gameOver || paused || isMobileControl) return;
+
+        switch (event.keyCode) {
+            case 37: // 왼쪽 화살표
+                p.move(-1);
+                break;
+            case 39: // 오른쪽 화살표
+                p.move(1);
+                break;
+            case 40: // 아래 화살표
+                p.drop();
+                break;
+            case 38: // 위 화살표
+                p.rotate();
+                break;
+            case 32: // 스페이스바
+                hardDrop();
+                break;
         }
     }
 
-    // 초기 캔버스 크기 설정
-    resizeCanvas();
-
-    // 화면 크기 변경 시 캔버스 크기 조정
-    window.addEventListener('resize', resizeCanvas);
-
-    // 모바일 컨트롤 토글
-    let isMobileControl = false;
-    controlToggleBtn.addEventListener('click', () => {
-        isMobileControl = !isMobileControl;
-        controlToggleBtn.textContent = isMobileControl ? '키보드 컨트롤' : '모바일 컨트롤';
-    });
+    // 초기 키보드 이벤트 리스너 등록
+    document.addEventListener('keydown', handleKeyDown);
 
     // 모바일 컨트롤 이벤트 리스너
     rotateBtn.addEventListener('click', () => {
@@ -198,28 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 pauseBtn.textContent = '계속하기';
             }
             paused = !paused;
-        }
-    });
-
-    document.addEventListener('keydown', event => {
-        if (gameOver || paused || isMobileControl) return;
-
-        switch (event.keyCode) {
-            case 37: // 왼쪽 화살표
-                p.move(-1);
-                break;
-            case 39: // 오른쪽 화살표
-                p.move(1);
-                break;
-            case 40: // 아래 화살표
-                p.drop();
-                break;
-            case 38: // 위 화살표
-                p.rotate();
-                break;
-            case 32: // 스페이스바
-                hardDrop();
-                break;
         }
     });
 
@@ -488,24 +439,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 다음 조각 그리기
     function drawNext() {
-        nextCtx.clearRect(0, 0, nextCtx.canvas.width, nextCtx.canvas.height);
-        if (nextPiece) {
-            // 다음 블록을 중앙에 배치하기 위한 오프셋 계산
-            const offsetX = (4 - nextPiece.shape[0].length) / 2;
-            const offsetY = (4 - nextPiece.shape.length) / 2;
-            
-            nextPiece.shape.forEach((row, y) => {
-                row.forEach((value, x) => {
-                    if (value > 0) {
-                        nextCtx.fillStyle = COLORS[value];
-                        nextCtx.fillRect(offsetX + x, offsetY + y, 1, 1);
-                        nextCtx.strokeStyle = 'white';
-                        nextCtx.lineWidth = 0.05;
-                        nextCtx.strokeRect(offsetX + x, offsetY + y, 1, 1);
-                    }
-                });
-            });
-        }
+        if (!nextPiece) return;
+        
+        // 모바일 화면에서는 다음 블록 미리보기 비활성화
+        if (window.innerWidth <= 768) return;
+        
+        nextCtx.clearRect(0, 0, 4, 4);
+        nextPiece.draw(nextCtx);
     }
 
     // 다음 조각 가져오기
@@ -530,6 +470,78 @@ document.addEventListener('DOMContentLoaded', () => {
             gameBoard.style.backgroundColor = colors[level % colors.length];
         }
     }
+
+    // 캔버스 크기 설정
+    function resizeCanvas() {
+        // 화면 크기 가져오기
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        
+        // 게임 보드 요소 가져오기
+        const gameBoard = document.querySelector('.game-board');
+        const container = document.querySelector('.container');
+        const gameInfo = document.querySelector('.game-info');
+        const controls = document.querySelector('.controls');
+        const nextPiece = document.querySelector('.next-piece');
+        
+        // 컨테이너 패딩과 여백 계산
+        const containerPadding = 20;
+        const elementMargin = 10;
+        const totalMargins = containerPadding * 2 + elementMargin * 4; // 상하 패딩 + 요소들 간의 마진
+        
+        // 게임 정보, 컨트롤, 다음 블록 영역의 예상 높이
+        const otherElementsHeight = gameInfo.offsetHeight + controls.offsetHeight + 
+            (window.innerWidth > 768 && !isMobileControl ? nextPiece.offsetHeight : 0) + totalMargins;
+        
+        // 사용 가능한 최대 높이 계산
+        const availableHeight = screenHeight - otherElementsHeight;
+        
+        // 게임 보드의 크기 계산 (2:1 비율 유지)
+        let boardHeight = Math.min(availableHeight * 0.95, screenHeight * 0.7);
+        let boardWidth = boardHeight / 2;
+        
+        // 화면 너비를 초과하지 않도록 조정
+        if (boardWidth > screenWidth * 0.95) {
+            boardWidth = screenWidth * 0.95;
+            boardHeight = boardWidth * 2;
+        }
+        
+        // 게임 보드 스타일 설정
+        gameBoard.style.width = `${boardWidth}px`;
+        gameBoard.style.height = `${boardHeight}px`;
+        
+        // 캔버스 크기 설정
+        canvas.width = boardWidth;
+        canvas.height = boardHeight;
+        BLOCK_SIZE = boardWidth / COLS;
+        
+        // 컨텍스트 초기화
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+        
+        // 다음 블록 캔버스 크기 설정 (모바일이 아니고 키보드 컨트롤일 때만)
+        if (window.innerWidth > 768 && !isMobileControl) {
+            const nextBlockSize = Math.min(boardWidth * 0.3, 100);
+            nextCanvas.width = nextBlockSize;
+            nextCanvas.height = nextBlockSize;
+            
+            // 다음 블록 컨텍스트 초기화
+            nextCtx.setTransform(1, 0, 0, 1, 0, 0);
+            nextCtx.scale(nextBlockSize/4, nextBlockSize/4);
+        }
+        
+        // 게임 보드 다시 그리기
+        if (p) {
+            drawBoard();
+            p.draw();
+        }
+    }
+
+    // 초기 캔버스 크기 설정
+    resizeCanvas();
+
+    // 화면 크기 변경 시 캔버스 크기 조정
+    window.addEventListener('resize', resizeCanvas);
 
     // 초기 게임 설정
     resetGame();

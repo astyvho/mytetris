@@ -208,18 +208,42 @@ button:hover {
         min-width: calc(33% - 5px);
         text-align: center;
     }
-    
+
+    .next-piece {
+        display: none;
+    }
+
+    .next-piece.show {
+        display: block;
+    }
+
+    .controls {
+        margin: 5px 0;
+    }
+
     .mobile-controls {
-        margin-top: 15px;
+        display: none;
     }
-    
+
+    .mobile-controls.active {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-top: 10px;
+    }
+
     .control-row {
-        margin: 8px 0;
+        margin: 5px 0;
     }
-    
+
     .control-row button {
-        width: clamp(45px, 10vw, 60px);
-        height: clamp(45px, 10vw, 60px);
+        width: clamp(40px, 8vw, 50px);
+        height: clamp(40px, 8vw, 50px);
+    }
+
+    #drop-btn {
+        width: clamp(120px, 25vw, 160px);
     }
 }
 
@@ -238,7 +262,15 @@ button:hover {
     }
     
     .next-piece {
-        padding: 5px;
+        display: none;
+    }
+
+    .mobile-controls {
+        margin-top: 5px;
+    }
+
+    .control-row {
+        margin: 3px 0;
     }
 }
 
