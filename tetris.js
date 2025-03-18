@@ -72,11 +72,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 캔버스 크기 설정
     function resizeCanvas() {
-        const gameBoard = document.querySelector('.game-board');
-        const boardWidth = gameBoard.clientWidth;
-        const boardHeight = gameBoard.clientHeight;
+        // 화면 크기 가져오기
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
         
-        // 게임 보드 캔버스 크기 설정
+        // 게임 보드 요소 가져오기
+        const gameBoard = document.querySelector('.game-board');
+        const container = document.querySelector('.container');
+        const gameInfo = document.querySelector('.game-info');
+        const controls = document.querySelector('.controls');
+        const nextPiece = document.querySelector('.next-piece');
+        
+        // 컨테이너 패딩과 여백 계산
+        const containerPadding = 20;
+        const elementMargin = 10;
+        const totalMargins = containerPadding * 2 + elementMargin * 4; // 상하 패딩 + 요소들 간의 마진
+        
+        // 게임 정보, 컨트롤, 다음 블록 영역의 예상 높이
+        const otherElementsHeight = gameInfo.offsetHeight + controls.offsetHeight + nextPiece.offsetHeight + totalMargins;
+        
+        // 사용 가능한 최대 높이 계산
+        const availableHeight = screenHeight - otherElementsHeight;
+        
+        // 게임 보드의 크기 계산 (2:1 비율 유지)
+        let boardHeight = Math.min(availableHeight * 0.95, screenHeight * 0.7);
+        let boardWidth = boardHeight / 2;
+        
+        // 화면 너비를 초과하지 않도록 조정
+        if (boardWidth > screenWidth * 0.95) {
+            boardWidth = screenWidth * 0.95;
+            boardHeight = boardWidth * 2;
+        }
+        
+        // 게임 보드 스타일 설정
+        gameBoard.style.width = `${boardWidth}px`;
+        gameBoard.style.height = `${boardHeight}px`;
+        
+        // 캔버스 크기 설정
         canvas.width = boardWidth;
         canvas.height = boardHeight;
         BLOCK_SIZE = boardWidth / COLS;
@@ -86,12 +118,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
         
         // 다음 블록 캔버스 크기 설정
-        nextCanvas.width = 100;
-        nextCanvas.height = 100;
+        const nextBlockSize = Math.min(boardWidth * 0.3, 100);
+        nextCanvas.width = nextBlockSize;
+        nextCanvas.height = nextBlockSize;
         
         // 다음 블록 컨텍스트 초기화
         nextCtx.setTransform(1, 0, 0, 1, 0, 0);
-        nextCtx.scale(25, 25);
+        nextCtx.scale(nextBlockSize/4, nextBlockSize/4);
         
         // 게임 보드 다시 그리기
         if (p) {
@@ -110,7 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let isMobileControl = false;
     controlToggleBtn.addEventListener('click', () => {
         isMobileControl = !isMobileControl;
-        mobileControls.classList.toggle('active');
         controlToggleBtn.textContent = isMobileControl ? '키보드 컨트롤' : '모바일 컨트롤';
     });
 

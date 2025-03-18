@@ -8,32 +8,38 @@ body {
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     min-height: 100vh;
     margin: 0;
     background-color: #f0f0f0;
     touch-action: none;
     padding: 10px;
+    padding-top: max(10px, env(safe-area-inset-top));
 }
 
 .container {
-    text-align: center;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
-    height: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 10px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
 .game-info {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 20px;
-    font-size: clamp(14px, 3vw, 18px);
+    width: 100%;
+    font-size: clamp(12px, 2.5vw, 16px);
+    margin-bottom: 5px;
 }
 
 h1 {
@@ -51,9 +57,10 @@ h2 {
 
 .score-container {
     background-color: #f8f8f8;
-    padding: 10px;
+    padding: 8px;
     border-radius: 5px;
     border: 1px solid #ddd;
+    font-size: clamp(12px, 2.5vw, 14px);
 }
 
 .score-container p {
@@ -62,16 +69,10 @@ h2 {
 }
 
 .game-board {
+    border: 2px solid #555;
+    border-radius: 5px;
     background-color: #2a2a2a;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-    margin-bottom: 20px;
-    width: 100%;
-    aspect-ratio: 1/2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin-bottom: 10px;
 }
 
 #board {
@@ -99,11 +100,10 @@ canvas {
 
 .next-piece {
     background-color: #f8f8f8;
-    padding: 10px;
+    padding: 8px;
     border-radius: 5px;
     border: 1px solid #ddd;
-    margin-bottom: 20px;
-    display: inline-block;
+    margin-bottom: 5px;
 }
 
 .next-piece h3 {
@@ -113,16 +113,15 @@ canvas {
 }
 
 .controls {
-    margin-bottom: 20px;
     display: flex;
     justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 8px;
+    margin: 5px 0;
 }
 
 button {
-    padding: clamp(8px, 2vw, 10px) clamp(16px, 3vw, 20px);
-    font-size: clamp(14px, 2.5vw, 16px);
+    padding: 8px 16px;
+    font-size: clamp(12px, 2.5vw, 14px);
     cursor: pointer;
     background-color: #4CAF50;
     color: white;
@@ -130,7 +129,7 @@ button {
     border-radius: 5px;
     transition: background-color 0.3s;
     touch-action: manipulation;
-    min-width: 80px;
+    min-width: 60px;
 }
 
 button:hover {
@@ -146,28 +145,31 @@ button:hover {
 }
 
 .mobile-controls {
-    display: none;
-    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-}
-
-.mobile-controls.active {
-    display: block;
+    margin-top: 10px;
 }
 
 .control-row {
     display: flex;
     justify-content: center;
-    margin: 10px 0;
+    margin: 5px 0;
     gap: 10px;
+    width: 100%;
 }
 
 .control-row button {
-    width: clamp(45px, 10vw, 60px);
-    height: clamp(45px, 10vw, 60px);
-    font-size: clamp(18px, 4vw, 24px);
-    background-color: #2196F3;
+    width: clamp(40px, 8vw, 50px);
+    height: clamp(40px, 8vw, 50px);
+    font-size: clamp(16px, 3vw, 20px);
     padding: 0;
+    background-color: #2196F3;
+}
+
+.control-row button:hover {
+    background-color: #1976D2;
 }
 
 #rotate-btn {
@@ -179,8 +181,8 @@ button:hover {
 }
 
 #drop-btn {
+    width: clamp(120px, 25vw, 160px);
     background-color: #F44336;
-    width: clamp(160px, 30vw, 200px);
 }
 
 #drop-btn:hover {
@@ -188,15 +190,54 @@ button:hover {
 }
 
 @media (max-width: 768px) {
-    .mobile-controls {
-        display: block;
+    body {
+        padding: 5px;
     }
     
     .container {
-        padding: 10px;
+        padding: 5px;
     }
     
-    .game-board {
+    .game-info {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    
+    .score-container {
+        flex: 1 1 auto;
+        min-width: calc(33% - 5px);
+        text-align: center;
+    }
+    
+    .mobile-controls {
+        margin-top: 15px;
+    }
+    
+    .control-row {
+        margin: 8px 0;
+    }
+    
+    .control-row button {
+        width: clamp(45px, 10vw, 60px);
+        height: clamp(45px, 10vw, 60px);
+    }
+}
+
+@media (max-height: 600px) {
+    .game-info {
+        font-size: clamp(10px, 2vw, 12px);
+    }
+    
+    .score-container {
+        padding: 5px;
+    }
+    
+    .controls button {
+        padding: 5px 10px;
+        font-size: clamp(10px, 2vw, 12px);
+    }
+    
+    .next-piece {
         padding: 5px;
     }
 }
