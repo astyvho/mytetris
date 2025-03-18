@@ -10,6 +10,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
+    height: 100%;
     margin: 0;
     background-color: #f0f0f0;
     touch-action: none;
@@ -19,12 +20,13 @@ body {
 .container {
     max-width: 100%;
     margin: 0 auto;
-    padding: 10px;
+    padding: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    padding-top: max(10px, env(safe-area-inset-top));
+    gap: 5px;
+    height: 100%;
+    padding-top: env(safe-area-inset-top);
 }
 
 .game-area {
@@ -39,7 +41,7 @@ body {
     justify-content: space-around;
     width: 100%;
     font-size: clamp(12px, 2.5vw, 16px);
-    margin-bottom: 5px;
+    margin-bottom: 3px;
 }
 
 h1 {
@@ -115,12 +117,12 @@ canvas {
 .controls {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin: 5px 0;
+    gap: 5px;
+    margin: 3px 0;
 }
 
 button {
-    padding: 8px 16px;
+    padding: 6px 12px;
     font-size: clamp(12px, 2.5vw, 14px);
     cursor: pointer;
     background-color: #4CAF50;
@@ -145,24 +147,17 @@ button:hover {
 }
 
 .mobile-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .control-row {
-    display: flex;
-    justify-content: center;
-    margin: 5px 0;
-    gap: 10px;
-    width: 100%;
+    margin: 3px 0;
+    gap: 5px;
 }
 
 .control-row button {
-    width: clamp(40px, 8vw, 50px);
-    height: clamp(40px, 8vw, 50px);
+    width: clamp(35px, 8vw, 45px);
+    height: clamp(35px, 8vw, 45px);
     font-size: clamp(16px, 3vw, 20px);
     padding: 0;
     background-color: #2196F3;
@@ -181,7 +176,7 @@ button:hover {
 }
 
 #drop-btn {
-    width: clamp(120px, 25vw, 160px);
+    width: clamp(100px, 25vw, 140px);
     background-color: #F44336;
 }
 
@@ -191,66 +186,40 @@ button:hover {
 
 @media (max-width: 768px) {
     body {
+        height: -webkit-fill-available;
         padding: env(safe-area-inset-top) 5px env(safe-area-inset-bottom) 5px;
     }
     
     .container {
-        padding: 5px;
-        padding-top: max(5px, env(safe-area-inset-top));
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        padding: 3px;
+        height: 100%;
     }
     
     .game-info {
-        flex-wrap: wrap;
-        gap: 5px;
-        margin-top: env(safe-area-inset-top);
+        margin: 3px 0;
+        gap: 3px;
     }
     
-    .score-container {
-        flex: 1 1 auto;
-        min-width: calc(33% - 5px);
-        text-align: center;
-    }
-
-    .next-piece {
-        display: none;
-    }
-
-    .next-piece.show {
-        display: block;
-    }
-
     .controls {
-        margin: 5px 0;
-        order: 2;
+        margin: 3px 0;
+        gap: 3px;
     }
 
     .mobile-controls {
-        display: none;
-        order: 3;
-        width: 100%;
-        margin-top: 10px;
-    }
-
-    .mobile-controls.active {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        margin-top: 3px;
     }
 
     .control-row {
-        margin: 5px 0;
+        margin: 2px 0;
     }
 
     .control-row button {
-        width: clamp(40px, 8vw, 50px);
-        height: clamp(40px, 8vw, 50px);
+        width: clamp(35px, 8vw, 45px);
+        height: clamp(35px, 8vw, 45px);
     }
 
     #drop-btn {
-        width: clamp(120px, 25vw, 160px);
+        width: clamp(100px, 25vw, 140px);
     }
 }
 
@@ -312,12 +281,18 @@ button:hover {
 }
 
 @supports (-webkit-touch-callout: none) {
-    /* iOS specific styles */
     body {
-        min-height: -webkit-fill-available;
+        height: -webkit-fill-available;
     }
     
     .container {
-        padding-top: max(10px, env(safe-area-inset-top));
+        height: -webkit-fill-available;
+        padding-top: env(safe-area-inset-top);
+    }
+    
+    @media (max-width: 768px) {
+        .game-info {
+            padding-top: env(safe-area-inset-top);
+        }
     }
 } 
