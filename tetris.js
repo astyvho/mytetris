@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 게임 상수
     const COLS = 10;
     const ROWS = 20;
-    const BLOCK_SIZE = 30;
+    let BLOCK_SIZE = 30;  // const를 let으로 변경
     const COLORS = [
         'transparent',
         '#FF3D92', // I - 더 밝은 핑크
@@ -79,13 +79,25 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.width = boardWidth;
         canvas.height = boardHeight;
         BLOCK_SIZE = boardWidth / COLS;
+        
+        // 컨텍스트 초기화
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
         
         // 다음 블록 캔버스 크기 설정
         const nextCanvas = document.getElementById('next-canvas');
         nextCanvas.width = 100;
         nextCanvas.height = 100;
+        
+        // 다음 블록 컨텍스트 초기화
+        nextCtx.setTransform(1, 0, 0, 1, 0, 0);
         nextCtx.scale(25, 25);
+        
+        // 게임 보드 다시 그리기
+        if (p) {
+            drawBoard();
+            p.draw();
+        }
     }
 
     // 초기 캔버스 크기 설정
