@@ -193,6 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // UI 업데이트
         updateScore();
         drawBoard();
+        
+        // 다음 블록 그리기
         if (nextCtx) {
             drawNextPiece();
         }
@@ -400,14 +402,27 @@ document.addEventListener('DOMContentLoaded', () => {
             this.ctx = ctx;
             this.x = Math.floor(COLS / 2) - Math.floor(shape[0].length / 2);  // 중앙에서 시작
             this.y = 0;
+            // 형태에 따른 고유 색상 값 저장
+            this.colorValue = this.findColorValue();
+        }
+        
+        // 블록의 색상 값 찾기
+        findColorValue() {
+            for (let y = 0; y < this.shape.length; y++) {
+                for (let x = 0; x < this.shape[y].length; x++) {
+                    if (this.shape[y][x] > 0) {
+                        return this.shape[y][x];
+                    }
+                }
+            }
+            return 1; // 기본값
         }
 
         draw() {
-            const value = this.shape[0].find(v => v > 0) || 1;  // 블록 색상 값 찾기
             this.shape.forEach((row, y) => {
                 row.forEach((cell, x) => {
                     if (cell > 0) {
-                        this.ctx.fillStyle = COLORS[value];
+                        this.ctx.fillStyle = COLORS[this.colorValue];
                         this.ctx.fillRect(this.x + x, this.y + y, 1, 1);
                         this.ctx.strokeStyle = 'white';
                         this.ctx.lineWidth = 0.05;
@@ -481,7 +496,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function getRandomPiece() {
         const pieces = [1, 2, 3, 4, 5, 6, 7];  // 1부터 7까지의 숫자로 변경
         const piece = pieces[Math.floor(Math.random() * pieces.length)];
-        return new Piece(SHAPES[piece], ctx);
+        const shape = SHAPES[piece];
+        
+        // 현재 블록으로 생성
+        return new Piece(shape, ctx);
     }
 
     // 레벨업 처리
@@ -503,17 +521,40 @@ document.addEventListener('DOMContentLoaded', () => {
     function drawNextPiece() {
         if (!nextCtx || !nextPiece) return;
         
+        // 캔버스 초기화
         nextCtx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
         nextCtx.fillStyle = '#2a2a2a';
         nextCtx.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
         
+        // 블록 크기 계산
+        const blockSize = Math.min(nextCanvas.width, nextCanvas.height) / 5;
+        
+        // 중앙 위치 계산
+        const offsetX = (nextCanvas.width - nextPiece.shape[0].length * blockSize) / 2;
+        const offsetY = (nextCanvas.height - nextPiece.shape.length * blockSize) / 2;
+        
+        // 조각 그리기
         nextPiece.shape.forEach((row, y) => {
-            row.forEach((value, x) => {
-                if (value > 0) {
-                    nextCtx.fillStyle = COLORS[value];
-                    nextCtx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-                    nextCtx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-                    nextCtx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+            row.forEach((cell, x) => {
+                if (cell > 0) {
+                    // 블록 그리기
+                    nextCtx.fillStyle = COLORS[nextPiece.colorValue];
+                    nextCtx.fillRect(
+                        offsetX + x * blockSize,
+                        offsetY + y * blockSize,
+                        blockSize,
+                        blockSize
+                    );
+                    
+                    // 블록 테두리 그리기
+                    nextCtx.strokeStyle = 'white';
+                    nextCtx.lineWidth = 1;
+                    nextCtx.strokeRect(
+                        offsetX + x * blockSize,
+                        offsetY + y * blockSize,
+                        blockSize,
+                        blockSize
+                    );
                 }
             });
         });
@@ -528,8 +569,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // 게임 보드 요소 가져오기
         const gameBoard = document.querySelector('.game-board');
         const container = document.querySelector('.container');
-        const leftPanel = document.querySelector('.left-panel');
-        const rightPanel = document.querySelector('.right-panel');
         
         // 사용 가능한 최대 높이 계산
         const availableHeight = screenHeight * 0.85;
@@ -559,13 +598,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 다음 블록 캔버스 크기 설정
         if (nextCanvas && nextCtx) {
-            const nextBlockSize = Math.min(boardWidth * 0.3, 90);
+            const nextBlockSize = Math.min(boardWidth * 0.8, 120);
             nextCanvas.width = nextBlockSize;
             nextCanvas.height = nextBlockSize;
-            
-            // 다음 블록 컨텍스트 초기화
-            nextCtx.setTransform(1, 0, 0, 1, 0, 0);
-            nextCtx.scale(nextBlockSize/4, nextBlockSize/4);
         }
         
         // 게임 보드 다시 그리기
@@ -582,7 +617,12 @@ document.addEventListener('DOMContentLoaded', () => {
     resizeCanvas();
 
     // 화면 크기 변경 시 캔버스 크기 조정
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+        if (nextCtx && nextPiece) {
+            drawNextPiece();
+        }
+    });
 
     // viewport 높이 설정 함수
     function setViewportHeight() {

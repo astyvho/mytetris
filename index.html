@@ -23,20 +23,13 @@
                     <span id="lines">0</span>
                 </div>
             </div>
-            <div class="next-block">
-                <div>다음 블록</div>
-                <canvas id="next-canvas"></canvas>
+        </div>
+
+        <div class="center-panel">
+            <div class="game-board">
+                <canvas id="board" width="300" height="600"></canvas>
             </div>
-        </div>
-        
-        <div class="game-board">
-            <canvas id="board" width="300" height="600"></canvas>
-        </div>
-        
-        <div class="right-panel">
-            <button id="start-button">시작</button>
-            <button id="pause-button">일시정지</button>
-            <button id="control-toggle">모바일 컨트롤</button>
+            
             <div class="mobile-controls">
                 <div class="control-row">
                     <button id="left-btn">←</button>
@@ -45,6 +38,21 @@
                 </div>
                 <button id="rotate-btn">회전</button>
                 <button id="drop-btn">즉시 내리기</button>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="next-block-container">
+                <div class="next-block-title">다음 블록</div>
+                <div class="next-block">
+                    <canvas id="next-canvas" width="120" height="120"></canvas>
+                </div>
+            </div>
+            
+            <div class="control-buttons">
+                <button id="start-button">다시 시작</button>
+                <button id="pause-button">일시정지</button>
+                <button id="control-toggle">키보드 컨트롤</button>
             </div>
         </div>
     </div>
