@@ -278,6 +278,14 @@ button:hover {
     .game-board {
         order: 1;
     }
+
+    .controls {
+        order: 3;
+    }
+
+    .mobile-controls {
+        order: 4;
+    }
 }
 
 @supports (-webkit-touch-callout: none) {
