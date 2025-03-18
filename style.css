@@ -165,23 +165,24 @@ button {
     padding: 10px;
     font-size: 14px;
     text-align: center;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 button:hover {
     opacity: 0.9;
 }
 
-/* 버튼 개별 스타일 */
-#start-button {
-    background-color: var(--green-btn-color);
-}
-
-#pause-button {
-    background-color: var(--red-btn-color);
-}
-
+/* 버튼 개별 스타일 - iOS Safari 문제 해결 */
+.arrow-controls button, 
+#rotate-btn, 
+#drop-btn, 
+#start-button, 
+#pause-button, 
 #control-toggle {
-    background-color: var(--green-btn-color);
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    border-radius: 4px !important;
 }
 
 .arrow-controls button {
@@ -192,8 +193,6 @@ button:hover {
     background-color: #4CAF50 !important; /* 강제 적용 */
     color: white !important;
     border: 2px solid rgba(255, 255, 255, 0.3);
-    -webkit-appearance: none; /* iOS 기본 스타일 제거 */
-    appearance: none;
 }
 
 #rotate-btn {
@@ -202,8 +201,6 @@ button:hover {
     background-color: #FF9800 !important; /* 강제 적용 */
     color: white !important;
     border: 2px solid rgba(255, 255, 255, 0.3);
-    -webkit-appearance: none; /* iOS 기본 스타일 제거 */
-    appearance: none;
 }
 
 #drop-btn {
@@ -212,8 +209,18 @@ button:hover {
     background-color: #f44336 !important; /* 강제 적용 */
     color: white !important;
     border: 2px solid rgba(255, 255, 255, 0.3);
-    -webkit-appearance: none; /* iOS 기본 스타일 제거 */
-    appearance: none;
+}
+
+#start-button {
+    background-color: #4CAF50 !important;
+}
+
+#pause-button {
+    background-color: #f44336 !important;
+}
+
+#control-toggle {
+    background-color: #4CAF50 !important;
 }
 
 /* 모바일 대응 */
@@ -314,6 +321,48 @@ button:hover {
 
 /* iOS Safari 대응 */
 @supports (-webkit-touch-callout: none) {
+    button {
+        -webkit-appearance: none !important;
+        appearance: none !important;
+        background-color: inherit !important;
+    }
+    
+    .arrow-controls button {
+        background-color: #4CAF50 !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+    }
+    
+    #rotate-btn {
+        background-color: #FF9800 !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+    }
+    
+    #drop-btn {
+        background-color: #f44336 !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+    }
+    
+    #start-button {
+        background-color: #4CAF50 !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+    }
+    
+    #pause-button {
+        background-color: #f44336 !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+    }
+    
+    #control-toggle {
+        background-color: #4CAF50 !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+    }
+    
     .container {
         height: -webkit-fill-available;
     }

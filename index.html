@@ -2,46 +2,64 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="msapplication-navbutton-color" content="#4CAF50">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>테트리스</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* iOS Safari 버튼 스타일 재정의 */
+        button {
+            -webkit-appearance: none !important;
+            appearance: none !important;
+            border-radius: 4px !important;
+        }
+        .arrow-controls button {
+            background-color: #4CAF50 !important;
+        }
+        #rotate-btn {
+            background-color: #FF9800 !important;
+        }
+        #drop-btn {
+            background-color: #f44336 !important;
+        }
+        #start-button {
+            background-color: #4CAF50 !important;
+        }
+        #pause-button {
+            background-color: #f44336 !important;
+        }
+        #control-toggle {
+            background-color: #4CAF50 !important;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <div class="left-panel">
-            <div class="game-info">
-                <div>
-                    <span>점수: </span>
-                    <span id="score">0</span>
-                </div>
-                <div>
-                    <span>레벨: </span>
-                    <span id="level">1</span>
-                </div>
-                <div>
-                    <span>라인: </span>
-                    <span id="lines">0</span>
-                </div>
+        <div class="game-info">
+            <div>
+                <span>점수: </span>
+                <span id="score">0</span>
+            </div>
+            <div>
+                <span>레벨: </span>
+                <span id="level">1</span>
+            </div>
+            <div>
+                <span>라인: </span>
+                <span id="lines">0</span>
             </div>
         </div>
 
-        <div class="center-panel">
+        <div class="game-area">
             <div class="game-board">
                 <canvas id="board" width="300" height="600"></canvas>
             </div>
             
-            <div class="mobile-controls">
-                <div class="control-row">
-                    <button id="left-btn">←</button>
-                    <button id="down-btn">↓</button>
-                    <button id="right-btn">→</button>
-                </div>
-                <button id="rotate-btn">회전</button>
-                <button id="drop-btn">즉시 내리기</button>
-            </div>
-        </div>
-
-        <div class="right-panel">
             <div class="next-block-container">
                 <div class="next-block-title">다음 블록</div>
                 <div class="next-block">
@@ -50,9 +68,19 @@
             </div>
             
             <div class="control-buttons">
-                <button id="start-button">다시 시작</button>
-                <button id="pause-button">일시정지</button>
-                <button id="control-toggle">키보드 컨트롤</button>
+                <button id="start-button" style="background-color: #4CAF50 !important; -webkit-appearance: none;">재시작</button>
+                <button id="pause-button" style="background-color: #f44336 !important; -webkit-appearance: none;">일시정지</button>
+                <button id="control-toggle" style="background-color: #4CAF50 !important; -webkit-appearance: none;">키보드 컨트롤</button>
+            </div>
+            
+            <div class="control-panel">
+                <div class="arrow-controls">
+                    <button id="left-btn" style="background-color: #4CAF50 !important; -webkit-appearance: none;">←</button>
+                    <button id="down-btn" style="background-color: #4CAF50 !important; -webkit-appearance: none;">↓</button>
+                    <button id="right-btn" style="background-color: #4CAF50 !important; -webkit-appearance: none;">→</button>
+                </div>
+                <button id="rotate-btn" style="background-color: #FF9800 !important; -webkit-appearance: none;">회전</button>
+                <button id="drop-btn" style="background-color: #f44336 !important; -webkit-appearance: none;">즉시 내리기</button>
             </div>
         </div>
     </div>
