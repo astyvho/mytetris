@@ -62,17 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let isMobileControl = false;
     
     controlToggleBtn.addEventListener('click', () => {
-        isMobileControl = !isMobileControl;
-        const controlPanel = document.querySelector('.control-panel');
-        controlPanel.style.display = isMobileControl ? 'flex' : 'none';
-        controlToggleBtn.textContent = isMobileControl ? '키보드 컨트롤' : '모바일 컨트롤';
-        
-        if (isMobileControl) {
-            document.removeEventListener('keydown', handleKeyDown);
-        } else {
-            document.addEventListener('keydown', handleKeyDown);
-        }
+        toggleControls();
     });
+
+    controlToggleBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        toggleControls();
+    }, { passive: false });
 
     // 초기 상태 설정
     const controlPanel = document.querySelector('.control-panel');
@@ -668,98 +664,73 @@ document.addEventListener('DOMContentLoaded', () => {
         return Array(ROWS).fill().map(() => Array(COLS).fill(0));
     }
 
-    // 버튼에 이벤트 리스너 추가 부분 찾기
-    // 아래는 이벤트 리스너를 추가하는 예시 코드입니다.
-    // 실제 코드는 다를 수 있으므로 tetris.js의 내용에 맞게 조정해야 합니다.
+    // toggleControls 함수 정의 추가
+    function toggleControls() {
+        isMobileControl = !isMobileControl;
+        const controlPanel = document.querySelector('.control-panel');
+        controlPanel.style.display = isMobileControl ? 'flex' : 'none';
+        document.getElementById('control-toggle').textContent = isMobileControl ? '키보드 컨트롤' : '모바일 컨트롤';
+        
+        if (isMobileControl) {
+            document.removeEventListener('keydown', handleKeyDown);
+        } else {
+            document.addEventListener('keydown', handleKeyDown);
+        }
+    }
 
-    // 시작 버튼 이벤트 리스너
-    document.getElementById('start-button').addEventListener('click', function() {
-        startGame();
-    });
-    document.getElementById('start-button').addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        startGame();
-    }, { passive: false });
+    // startGame, pauseGame, moveLeft, moveRight, moveDown, rotate, hardDrop 함수 정의 추가
+    function startGame() {
+        if (gameOver) {
+            resetGame();
+        }
+        
+        if (!requestId) {
+            play();
+        }
+        
+        document.getElementById('start-button').textContent = '재시작';
+    }
 
-    // 일시정지 버튼 이벤트 리스너
-    document.getElementById('pause-button').addEventListener('click', function() {
-        pauseGame();
-    });
-    document.getElementById('pause-button').addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        pauseGame();
-    }, { passive: false });
+    function pauseGame() {
+        if (!gameOver) {
+            if (paused) {
+                play();
+                document.getElementById('pause-button').textContent = '일시정지';
+            } else {
+                pause();
+                document.getElementById('pause-button').textContent = '계속하기';
+            }
+            paused = !paused;
+        }
+    }
 
-    // 키보드 컨트롤 토글 버튼 이벤트 리스너
-    document.getElementById('control-toggle').addEventListener('click', function() {
-        toggleControls();
-    });
-    document.getElementById('control-toggle').addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        toggleControls();
-    }, { passive: false });
+    function moveLeft() {
+        if (!gameOver && !paused && p) {
+            p.move(-1);
+        }
+    }
 
-    // 왼쪽 버튼 이벤트 리스너
-    document.getElementById('left-btn').addEventListener('click', function() {
-        moveLeft();
-    });
-    document.getElementById('left-btn').addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        moveLeft();
-    }, { passive: false });
+    function moveRight() {
+        if (!gameOver && !paused && p) {
+            p.move(1);
+        }
+    }
 
-    // 아래 버튼 이벤트 리스너
-    document.getElementById('down-btn').addEventListener('click', function() {
-        moveDown();
-    });
-    document.getElementById('down-btn').addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        moveDown();
-    }, { passive: false });
+    function moveDown() {
+        if (!gameOver && !paused && p) {
+            p.drop();
+        }
+    }
 
-    // 오른쪽 버튼 이벤트 리스너
-    document.getElementById('right-btn').addEventListener('click', function() {
-        moveRight();
-    });
-    document.getElementById('right-btn').addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        moveRight();
-    }, { passive: false });
+    function rotate() {
+        if (!gameOver && !paused && p) {
+            p.rotate();
+        }
+    }
 
-    // 회전 버튼 이벤트 리스너
-    document.getElementById('rotate-btn').addEventListener('click', function() {
-        rotate();
-    });
-    document.getElementById('rotate-btn').addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        rotate();
-    }, { passive: false });
-
-    // 즉시 내리기 버튼 이벤트 리스너
-    document.getElementById('drop-btn').addEventListener('click', function() {
-        hardDrop();
-    });
-    document.getElementById('drop-btn').addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        hardDrop();
-    }, { passive: false });
-
-    // iOS 터치 이벤트 처리 개선
-    document.addEventListener('DOMContentLoaded', function() {
-        // 모든 버튼에 터치 이벤트 설정
-        const buttons = document.querySelectorAll('button');
-        buttons.forEach(button => {
-            button.addEventListener('touchstart', function(e) {
-                // 터치 이벤트가 발생하면 해당 버튼에 active 클래스 추가
-                this.classList.add('active');
-                // 기본 동작 방지
-                e.preventDefault();
-            }, { passive: false });
-            
-            button.addEventListener('touchend', function() {
-                // 터치 이벤트가 끝나면 active 클래스 제거
-                this.classList.remove('active');
-            });
-        });
-    });
+    function hardDrop() {
+        if (!gameOver && !paused && p) {
+            while (p.drop()) {}
+        }
+    }
 }); 
