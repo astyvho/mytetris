@@ -8,42 +8,42 @@
 </head>
 <body>
     <div class="container">
-        <div class="game-info">
-            <div class="score-box">
-                <span>점수: </span>
-                <span id="score">0</span>
+        <div class="left-panel">
+            <div class="game-info">
+                <div>
+                    <span>점수: </span>
+                    <span id="score">0</span>
+                </div>
+                <div>
+                    <span>레벨: </span>
+                    <span id="level">1</span>
+                </div>
+                <div>
+                    <span>라인: </span>
+                    <span id="lines">0</span>
+                </div>
             </div>
-            <div class="level-box">
-                <span>레벨: </span>
-                <span id="level">1</span>
-            </div>
-            <div class="lines-box">
-                <span>라인: </span>
-                <span id="lines">0</span>
+            <div class="next-block">
+                <div>다음 블록</div>
+                <canvas id="next-canvas"></canvas>
             </div>
         </div>
-        <div class="next-piece">
-            <h3>다음 블록</h3>
-            <canvas id="next-canvas"></canvas>
-        </div>
+        
         <div class="game-board">
-            <canvas id="board"></canvas>
+            <canvas id="board" width="300" height="600"></canvas>
         </div>
-        <div class="controls">
+        
+        <div class="right-panel">
             <button id="start-button">시작</button>
             <button id="pause-button">일시정지</button>
             <button id="control-toggle">모바일 컨트롤</button>
-        </div>
-        <div class="mobile-controls">
-            <div class="control-row">
+            <div class="mobile-controls">
+                <div class="control-row">
+                    <button id="left-btn">←</button>
+                    <button id="down-btn">↓</button>
+                    <button id="right-btn">→</button>
+                </div>
                 <button id="rotate-btn">회전</button>
-            </div>
-            <div class="control-row">
-                <button id="left-btn">←</button>
-                <button id="down-btn">↓</button>
-                <button id="right-btn">→</button>
-            </div>
-            <div class="control-row">
                 <button id="drop-btn">즉시 내리기</button>
             </div>
         </div>

@@ -40,22 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
         10: 50      // 레벨 10 이상: 0.05초 (기존 0.1초)
     };
 
-    // 게임 변수
-    let board = createBoard();
-    let score = 0;
-    let level = 1;
-    let lines = 0;
-    let gameOver = false;
-    let paused = false;
-    let requestId = null;
-    let time = { start: 0, elapsed: 0, level: LEVEL_SPEEDS[1] };
-    let p = null;  // 현재 블록 변수 추가
-
     // DOM 요소
     const canvas = document.getElementById('board');
     const ctx = canvas.getContext('2d');
     const nextCanvas = document.getElementById('next-canvas');
-    const nextCtx = nextCanvas.getContext('2d');
+    const nextCtx = nextCanvas ? nextCanvas.getContext('2d') : null;
     const scoreElement = document.getElementById('score');
     const levelElement = document.getElementById('level');
     const linesElement = document.getElementById('lines');
@@ -71,26 +60,80 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 모바일 컨트롤 토글
     let isMobileControl = false;
-    const nextPieceElement = document.querySelector('.next-piece');
     
     controlToggleBtn.addEventListener('click', () => {
         isMobileControl = !isMobileControl;
-        mobileControls.classList.toggle('active');
-        nextPieceElement.classList.toggle('show', !isMobileControl);
+        mobileControls.style.display = isMobileControl ? 'flex' : 'none';
         controlToggleBtn.textContent = isMobileControl ? '키보드 컨트롤' : '모바일 컨트롤';
         
-        // 모바일 컨트롤 활성화 시 키보드 이벤트 비활성화
         if (isMobileControl) {
             document.removeEventListener('keydown', handleKeyDown);
-            nextPieceElement.style.display = 'none';
         } else {
             document.addEventListener('keydown', handleKeyDown);
-            nextPieceElement.style.display = 'block';
         }
     });
 
     // 초기 상태 설정
-    nextPieceElement.classList.add('show');
+    mobileControls.style.display = 'none';
+    document.addEventListener('keydown', handleKeyDown);
+
+    // 시작 버튼 이벤트 리스너
+    startBtn.addEventListener('click', () => {
+        if (gameOver) {
+            resetGame();
+        }
+        
+        if (!requestId) {
+            play();
+        }
+        
+        startBtn.textContent = '재시작';
+    });
+
+    // 일시정지 버튼 이벤트 리스너
+    pauseBtn.addEventListener('click', () => {
+        if (!gameOver) {
+            if (paused) {
+                play();
+                pauseBtn.textContent = '일시정지';
+            } else {
+                pause();
+                pauseBtn.textContent = '계속하기';
+            }
+            paused = !paused;
+        }
+    });
+
+    // 모바일 컨트롤 버튼 이벤트 리스너
+    rotateBtn.addEventListener('click', () => {
+        if (!gameOver && !paused && isMobileControl && p) {
+            p.rotate();
+        }
+    });
+
+    leftBtn.addEventListener('click', () => {
+        if (!gameOver && !paused && isMobileControl && p) {
+            p.move(-1);
+        }
+    });
+
+    rightBtn.addEventListener('click', () => {
+        if (!gameOver && !paused && isMobileControl && p) {
+            p.move(1);
+        }
+    });
+
+    downBtn.addEventListener('click', () => {
+        if (!gameOver && !paused && isMobileControl && p) {
+            p.drop();
+        }
+    });
+
+    dropBtn.addEventListener('click', () => {
+        if (!gameOver && !paused && isMobileControl && p) {
+            hardDrop();
+        }
+    });
 
     // 키보드 이벤트 핸들러
     function handleKeyDown(event) {
@@ -115,70 +158,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 초기 키보드 이벤트 리스너 등록
-    document.addEventListener('keydown', handleKeyDown);
+    // 게임 변수
+    let board = createBoard();
+    let score = 0;
+    let level = 1;
+    let lines = 0;
+    let gameOver = false;
+    let paused = false;
+    let requestId = null;
+    let time = { start: 0, elapsed: 0, level: LEVEL_SPEEDS[1] };
+    let p = null;
+    let nextPiece = null;
 
-    // 모바일 컨트롤 이벤트 리스너
-    rotateBtn.addEventListener('click', () => {
-        if (!gameOver && !paused && isMobileControl) {
-            p.rotate();
+    // 게임 초기화 (최초 로드 시)
+    function initializeGame() {
+        // 캔버스 크기 설정
+        resizeCanvas();
+        
+        // 게임 보드 생성
+        board = createBoard();
+        gameOver = false;
+        paused = false;
+        
+        // 초기 점수 설정
+        score = 0;
+        level = 1;
+        lines = 0;
+        time = { start: 0, elapsed: 0, level: LEVEL_SPEEDS[1] };
+        
+        // 초기 블록 생성
+        nextPiece = getRandomPiece();
+        p = getRandomPiece();
+        
+        // UI 업데이트
+        updateScore();
+        drawBoard();
+        if (nextCtx) {
+            drawNextPiece();
         }
-    });
-
-    leftBtn.addEventListener('click', () => {
-        if (!gameOver && !paused && isMobileControl) {
-            p.move(-1);
-        }
-    });
-
-    rightBtn.addEventListener('click', () => {
-        if (!gameOver && !paused && isMobileControl) {
-            p.move(1);
-        }
-    });
-
-    downBtn.addEventListener('click', () => {
-        if (!gameOver && !paused && isMobileControl) {
-            p.drop();
-        }
-    });
-
-    dropBtn.addEventListener('click', () => {
-        if (!gameOver && !paused && isMobileControl) {
-            hardDrop();
-        }
-    });
-
-    // 이벤트 리스너
-    startBtn.addEventListener('click', () => {
-        if (gameOver) {
-            resetGame();
-        }
-        if (!requestId) {
-            play();
-            startBtn.textContent = '재시작';
-        }
-    });
-
-    pauseBtn.addEventListener('click', () => {
-        if (!gameOver) {
-            if (paused) {
-                play();
-                pauseBtn.textContent = '일시정지';
-            } else {
-                pause();
-                pauseBtn.textContent = '계속하기';
-            }
-            paused = !paused;
-        }
-    });
-
-    // 게임 보드 생성
-    function createBoard() {
-        return Array(ROWS).fill().map(() => Array(COLS).fill(0));
     }
 
-    // 게임 초기화
+    // 게임 리셋 (재시작 시)
     function resetGame() {
         board = createBoard();
         score = 0;
@@ -187,10 +207,13 @@ document.addEventListener('DOMContentLoaded', () => {
         gameOver = false;
         paused = false;
         time = { start: 0, elapsed: 0, level: LEVEL_SPEEDS[1] };
+        nextPiece = getRandomPiece();
         p = getRandomPiece();
         updateScore();
         drawBoard();
-        p.draw();
+        if (nextCtx) {
+            drawNextPiece();
+        }
     }
 
     // 점수 업데이트
@@ -213,12 +236,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (gameOver) {
             resetGame();
         }
+        
+        // 이미 블록이 생성되어 있지 않으면 생성
+        if (!p) {
+            p = getRandomPiece();
+        }
+        
+        if (!nextPiece) {
+            nextPiece = getRandomPiece();
+        }
+        
         time.start = performance.now();
+        
         if (requestId) {
             cancelAnimationFrame(requestId);
         }
+        
         animate();
-        startBtn.textContent = '재시작';
     }
 
     // 게임 오버
@@ -253,7 +287,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     gameOverFunc();
                     return;
                 }
-                p = getRandomPiece();
+                // 다음 조각을 현재 조각으로
+                p = nextPiece;
+                // 새로운 다음 조각 생성
+                nextPiece = getRandomPiece();
+                // 다음 조각 그리기
+                if (nextCtx) {
+                    drawNextPiece();
+                }
             }
         }
 
@@ -458,6 +499,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // 다음 조각 그리기
+    function drawNextPiece() {
+        if (!nextCtx || !nextPiece) return;
+        
+        nextCtx.clearRect(0, 0, nextCanvas.width, nextCanvas.height);
+        nextCtx.fillStyle = '#2a2a2a';
+        nextCtx.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
+        
+        nextPiece.shape.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value > 0) {
+                    nextCtx.fillStyle = COLORS[value];
+                    nextCtx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                    nextCtx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                    nextCtx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+                }
+            });
+        });
+    }
+
     // 캔버스 크기 설정
     function resizeCanvas() {
         // 화면 크기 가져오기
@@ -467,29 +528,19 @@ document.addEventListener('DOMContentLoaded', () => {
         // 게임 보드 요소 가져오기
         const gameBoard = document.querySelector('.game-board');
         const container = document.querySelector('.container');
-        const gameInfo = document.querySelector('.game-info');
-        const controls = document.querySelector('.controls');
-        const nextPiece = document.querySelector('.next-piece');
-        
-        // 컨테이너 패딩과 여백 계산
-        const containerPadding = 20;
-        const elementMargin = 10;
-        const totalMargins = containerPadding * 2 + elementMargin * 4; // 상하 패딩 + 요소들 간의 마진
-        
-        // 게임 정보, 컨트롤, 다음 블록 영역의 예상 높이
-        const otherElementsHeight = gameInfo.offsetHeight + controls.offsetHeight + 
-            (window.innerWidth > 768 && !isMobileControl ? nextPiece.offsetHeight : 0) + totalMargins;
+        const leftPanel = document.querySelector('.left-panel');
+        const rightPanel = document.querySelector('.right-panel');
         
         // 사용 가능한 최대 높이 계산
-        const availableHeight = screenHeight - otherElementsHeight;
+        const availableHeight = screenHeight * 0.85;
         
         // 게임 보드의 크기 계산 (2:1 비율 유지)
-        let boardHeight = Math.min(availableHeight * 0.95, screenHeight * 0.7);
+        let boardHeight = Math.min(availableHeight, screenHeight * 0.7);
         let boardWidth = boardHeight / 2;
         
         // 화면 너비를 초과하지 않도록 조정
-        if (boardWidth > screenWidth * 0.95) {
-            boardWidth = screenWidth * 0.95;
+        if (boardWidth > screenWidth * 0.4) {
+            boardWidth = screenWidth * 0.4;
             boardHeight = boardWidth * 2;
         }
         
@@ -506,9 +557,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
         
-        // 다음 블록 캔버스 크기 설정 (모바일이 아니고 키보드 컨트롤일 때만)
-        if (window.innerWidth > 768 && !isMobileControl) {
-            const nextBlockSize = Math.min(boardWidth * 0.3, 100);
+        // 다음 블록 캔버스 크기 설정
+        if (nextCanvas && nextCtx) {
+            const nextBlockSize = Math.min(boardWidth * 0.3, 90);
             nextCanvas.width = nextBlockSize;
             nextCanvas.height = nextBlockSize;
             
@@ -521,6 +572,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (p) {
             drawBoard();
             p.draw();
+            if (nextPiece && nextCtx) {
+                drawNextPiece();
+            }
         }
     }
 
@@ -550,6 +604,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 초기 게임 설정
-    resetGame();
+    initializeGame();
     drawBoard();
+
+    // 게임 보드 생성
+    function createBoard() {
+        return Array(ROWS).fill().map(() => Array(COLS).fill(0));
+    }
 }); 
