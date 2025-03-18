@@ -41,6 +41,7 @@ body {
     flex-direction: column;
     align-items: center;
     height: 100%;
+    justify-content: space-between;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
@@ -65,27 +66,19 @@ body {
 
 /* 게임 영역 */
 .game-area {
-    position: relative;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin-top: 20px;
-    padding: 0 130px 0 0; /* 우측 여백 추가 */
+    width: 300px;
+    height: 600px;
+    margin: 50px auto 20px auto;
 }
 
 /* 게임 보드 */
 .game-board {
-    width: 300px;
-    height: 600px;
+    width: 100%;
+    height: 100%;
     border: 2px solid #555;
     border-radius: 4px;
     background-color: var(--board-bg-color);
     overflow: hidden;
-    margin-bottom: 15px;
-    position: relative;
-    left: -20px; /* 왼쪽으로 약간 이동 */
 }
 
 .game-board canvas {
@@ -95,21 +88,35 @@ body {
     background-color: var(--board-bg-color);
 }
 
+/* 컨트롤 컨테이너 */
+.control-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* 게임 컨트롤과 다음 블록 */
+.game-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+}
+
 /* 다음 블록 영역 */
 .next-block-container {
-    position: absolute;
-    right: 10px;
-    top: 60px;
     display: flex;
     flex-direction: column;
     gap: 5px;
     width: 100px;
-    z-index: 2;
 }
 
 .next-block-title {
     font-size: 14px;
     font-weight: bold;
+    text-align: center;
 }
 
 .next-block {
@@ -129,14 +136,9 @@ body {
 
 /* 컨트롤 버튼 영역 */
 .control-buttons {
-    position: absolute;
-    right: 10px;
-    top: 190px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 110px;
-    z-index: 2;
 }
 
 /* 방향키 및 버튼 */
@@ -151,7 +153,7 @@ body {
 .arrow-controls {
     display: flex;
     justify-content: center;
-    gap: 5px;
+    gap: 10px;
 }
 
 /* 버튼 공통 스타일 */
@@ -183,6 +185,12 @@ button:hover {
     -webkit-appearance: none !important;
     appearance: none !important;
     border-radius: 4px !important;
+}
+
+.control-buttons button {
+    width: 110px;
+    font-size: 14px;
+    padding: 8px 0;
 }
 
 .arrow-controls button {
@@ -230,64 +238,55 @@ button:hover {
     }
     
     .game-area {
-        padding: 0; /* 모바일에서는 패딩 제거 */
-        width: 100%;
-        margin-top: 50px; /* 상단에 게임 정보 영역을 위한 여백 추가 */
-    }
-    
-    .game-board {
-        left: 0; /* 모바일에서는 중앙 정렬 */
-        margin: 0 auto 15px auto;
+        width: 300px;
+        height: 450px;
+        margin: 50px auto 10px auto;
     }
     
     .game-info {
-        position: absolute; /* 항상 절대 위치 유지 */
-        left: 10px;
-        top: 10px;
         font-size: 14px;
-        gap: 5px;
+        gap: 3px;
         padding: 8px;
-        width: auto; /* 너비 자동 조정 */
+    }
+    
+    .game-controls {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 100%;
     }
     
     .next-block-container {
-        position: static;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        margin-top: 10px;
-        text-align: center;
+        width: 80px;
     }
     
     .next-block-title {
-        margin-bottom: 5px;
+        font-size: 12px;
     }
     
     .next-block {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
     }
     
     .control-buttons {
-        position: static;
-        width: 100%;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 10px;
-        margin: 15px 0;
-    }
-    
-    .control-buttons button {
-        font-size: 14px;
-        padding: 8px 5px;
-        height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
         width: auto;
     }
     
+    .control-buttons button {
+        width: 100px;
+        font-size: 12px;
+        padding: 6px 0;
+        margin-bottom: 3px;
+    }
+    
     .control-panel {
-        margin-top: 15px;
-        gap: 15px;
         width: 100%;
+        margin-top: 5px;
+        gap: 8px;
     }
     
     .arrow-controls {
@@ -297,201 +296,63 @@ button:hover {
     }
     
     .arrow-controls button {
-        width: 50px;
-        height: 50px;
-        font-size: 20px;
-        background-color: #4CAF50 !important;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        width: 45px;
+        height: 45px;
+        font-size: 16px;
+        padding: 0;
+        border-width: 1px;
     }
     
     #rotate-btn {
         width: 60px;
-        height: 50px;
-        font-size: 16px;
-        background-color: #FF9800 !important;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        height: 45px;
+        font-size: 14px;
+        border-width: 1px;
     }
     
     #drop-btn {
-        width: 70%;
+        width: 100%;
         height: 40px;
-        font-size: 16px;
-        background-color: #f44336 !important;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        font-size: 14px;
+        border-width: 1px;
+    }
+}
+
+/* 모바일 작은 화면 대응 */
+@media (max-width: 360px) {
+    .container {
+        padding: 5px;
+    }
+    
+    .game-area {
+        width: 240px;
+        height: 400px;
+    }
+    
+    .control-buttons button {
+        width: 85px;
+        font-size: 11px;
+    }
+    
+    .arrow-controls button {
+        width: 40px;
+        height: 40px;
+    }
+    
+    #rotate-btn {
+        width: 50px;
+        height: 40px;
     }
 }
 
 /* iOS Safari 대응 */
 @supports (-webkit-touch-callout: none) {
-    button {
-        -webkit-appearance: none !important;
-        appearance: none !important;
-        background-color: inherit !important;
-        pointer-events: auto !important;
-    }
-    
-    .arrow-controls button {
-        background-color: #4CAF50 !important;
-        -webkit-appearance: none !important;
-        appearance: none !important;
-        pointer-events: auto !important;
-    }
-    
-    #rotate-btn {
-        background-color: #FF9800 !important;
-        -webkit-appearance: none !important;
-        appearance: none !important;
-        pointer-events: auto !important;
-    }
-    
-    #drop-btn {
-        background-color: #f44336 !important;
-        -webkit-appearance: none !important;
-        appearance: none !important;
-        pointer-events: auto !important;
-    }
-    
-    #start-button {
-        background-color: #4CAF50 !important;
-        -webkit-appearance: none !important;
-        appearance: none !important;
-        pointer-events: auto !important;
-    }
-    
-    #pause-button {
-        background-color: #f44336 !important;
-        -webkit-appearance: none !important;
-        appearance: none !important;
-        pointer-events: auto !important;
-    }
-    
-    #control-toggle {
-        background-color: #4CAF50 !important;
-        -webkit-appearance: none !important;
-        appearance: none !important;
-        pointer-events: auto !important;
-    }
-    
     .container {
         height: -webkit-fill-available;
     }
     
     /* iOS 하단 네비게이션 바 대응 */
     .control-panel {
-        margin-bottom: env(safe-area-inset-bottom, 20px);
-    }
-}
-
-/* 가로 모드 대응 */
-@media (orientation: landscape) and (max-width: 900px) {
-    .container {
-        flex-direction: row;
-        align-items: flex-start;
-        gap: 15px;
-        justify-content: center;
-        padding: 5px 5px 5px 80px; /* 왼쪽에 게임 정보를 위한 공간 확보 */
-    }
-    
-    .game-area {
-        flex: 0 0 auto;
-        margin-top: 0;
-        padding: 0 20px; /* 가로 모드에서 여백 축소 */
-    }
-    
-    .game-board {
-        left: 0; /* 가로 모드에서는 중앙 정렬 */
-        margin-bottom: 15px;
-        width: 240px; /* 가로 모드에서는 게임 보드 크기 축소 */
-        height: 480px;
-    }
-    
-    .game-info {
-        position: absolute;
-        left: 10px;
-        top: 10px;
-        flex-direction: column;
-        width: auto;
-        gap: 5px;
-        font-size: 12px;
-        background-color: rgba(234, 234, 234, 0.9); /* 약간 투명하게 */
-    }
-    
-    .next-block-container {
-        position: absolute;
-        right: 10px;
-        top: 10px;
-        width: 80px;
-    }
-    
-    .next-block {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .control-buttons {
-        position: absolute;
-        right: 10px;
-        top: 120px;
-        display: flex;
-        flex-direction: column;
-        width: 100px;
-        gap: 5px;
-    }
-    
-    .control-panel {
-        position: absolute;
-        bottom: 10px;
-        left: 0;
-        right: 0;
-        margin: 0 auto;
-        width: 240px;
-    }
-    
-    .arrow-controls button {
-        width: 50px;
-        height: 50px;
-        font-size: 18px;
-        background-color: #4CAF50 !important;
-    }
-    
-    #rotate-btn {
-        width: 60px;
-        height: 50px;
-        background-color: #FF9800 !important;
-    }
-    
-    #drop-btn {
-        width: 160px;
-        height: 40px;
-        background-color: #f44336 !important;
-    }
-}
-
-/* 매우 작은 화면 대응 */
-@media (max-width: 360px) {
-    .game-board {
-        width: 240px;
-        height: 480px;
-    }
-    
-    .next-block {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .arrow-controls button {
-        width: 60px;
-        height: 60px;
-        font-size: 20px;
-    }
-    
-    #rotate-btn {
-        width: 70px;
-        height: 50px;
-    }
-    
-    #drop-btn {
-        width: 70%;
-        height: 45px;
+        margin-bottom: env(safe-area-inset-bottom, 10px);
     }
 } 
