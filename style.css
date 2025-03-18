@@ -196,6 +196,9 @@ button:hover {
     
     .container {
         padding: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     
     .game-info {
@@ -219,18 +222,20 @@ button:hover {
 
     .controls {
         margin: 5px 0;
+        order: 2;
     }
 
     .mobile-controls {
         display: none;
+        order: 3;
+        width: 100%;
+        margin-top: 10px;
     }
 
     .mobile-controls.active {
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 100%;
-        margin-top: 10px;
     }
 
     .control-row {
