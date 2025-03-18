@@ -13,8 +13,7 @@ body {
     margin: 0;
     background-color: #f0f0f0;
     touch-action: none;
-    padding: 10px;
-    padding-top: max(10px, env(safe-area-inset-top));
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 .container {
@@ -25,6 +24,7 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    padding-top: max(10px, env(safe-area-inset-top));
 }
 
 .game-area {
@@ -191,11 +191,12 @@ button:hover {
 
 @media (max-width: 768px) {
     body {
-        padding: 5px;
+        padding: env(safe-area-inset-top) 5px env(safe-area-inset-bottom) 5px;
     }
     
     .container {
         padding: 5px;
+        padding-top: max(5px, env(safe-area-inset-top));
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -204,6 +205,7 @@ button:hover {
     .game-info {
         flex-wrap: wrap;
         gap: 5px;
+        margin-top: env(safe-area-inset-top);
     }
     
     .score-container {
@@ -306,5 +308,16 @@ button:hover {
     
     .game-board {
         order: 1;
+    }
+}
+
+@supports (-webkit-touch-callout: none) {
+    /* iOS specific styles */
+    body {
+        min-height: -webkit-fill-available;
+    }
+    
+    .container {
+        padding-top: max(10px, env(safe-area-inset-top));
     }
 } 
