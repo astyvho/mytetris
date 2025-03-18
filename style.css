@@ -13,6 +13,7 @@ body {
     margin: 0;
     background-color: #f0f0f0;
     touch-action: none;
+    padding: 10px;
 }
 
 .container {
@@ -21,15 +22,18 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    max-width: 100%;
-    width: 500px;
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .game-info {
     display: flex;
     justify-content: space-around;
     margin-bottom: 20px;
-    font-size: 18px;
+    font-size: clamp(14px, 3vw, 18px);
 }
 
 h1 {
@@ -59,12 +63,20 @@ h2 {
 
 .game-board {
     background-color: #2a2a2a;
-    padding: 20px;
+    padding: 10px;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     margin-bottom: 20px;
     width: 100%;
-    box-sizing: border-box;
+    aspect-ratio: 1/2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#board {
+    width: 100%;
+    height: 100%;
 }
 
 canvas {
@@ -75,6 +87,8 @@ canvas {
     background-color: #4a4a4a;
     border: 1px solid #333;
     border-radius: 3px;
+    width: 100px;
+    height: 100px;
 }
 
 #level {
@@ -95,17 +109,20 @@ canvas {
 .next-piece h3 {
     margin: 0 0 10px 0;
     color: #333;
-    font-size: 16px;
+    font-size: clamp(14px, 2.5vw, 16px);
 }
 
 .controls {
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin: 0 5px;
+    padding: clamp(8px, 2vw, 10px) clamp(16px, 3vw, 20px);
+    font-size: clamp(14px, 2.5vw, 16px);
     cursor: pointer;
     background-color: #4CAF50;
     color: white;
@@ -113,6 +130,7 @@ button {
     border-radius: 5px;
     transition: background-color 0.3s;
     touch-action: manipulation;
+    min-width: 80px;
 }
 
 button:hover {
@@ -130,6 +148,7 @@ button:hover {
 .mobile-controls {
     display: none;
     margin-top: 20px;
+    width: 100%;
 }
 
 .mobile-controls.active {
@@ -140,19 +159,15 @@ button:hover {
     display: flex;
     justify-content: center;
     margin: 10px 0;
+    gap: 10px;
 }
 
 .control-row button {
-    width: 60px;
-    height: 60px;
-    margin: 0 5px;
-    font-size: 24px;
+    width: clamp(45px, 10vw, 60px);
+    height: clamp(45px, 10vw, 60px);
+    font-size: clamp(18px, 4vw, 24px);
     background-color: #2196F3;
-    touch-action: manipulation;
-}
-
-.control-row button:hover {
-    background-color: #1976D2;
+    padding: 0;
 }
 
 #rotate-btn {
@@ -165,7 +180,7 @@ button:hover {
 
 #drop-btn {
     background-color: #F44336;
-    width: 200px;
+    width: clamp(160px, 30vw, 200px);
 }
 
 #drop-btn:hover {
@@ -179,47 +194,24 @@ button:hover {
     
     .container {
         padding: 10px;
-        margin: 10px;
     }
     
-    .game-info {
-        font-size: 16px;
-    }
-    
-    button {
-        padding: 8px 16px;
-        font-size: 14px;
-    }
-
-    .control-row button {
-        width: 50px;
-        height: 50px;
-        font-size: 20px;
-    }
-
-    #drop-btn {
-        width: 180px;
+    .game-board {
+        padding: 5px;
     }
 }
 
 @media (max-width: 480px) {
     .container {
         padding: 5px;
-        margin: 5px;
     }
 
-    .game-info {
-        font-size: 14px;
+    .controls {
+        gap: 5px;
     }
 
-    .control-row button {
-        width: 45px;
-        height: 45px;
-        font-size: 18px;
-    }
-
-    #drop-btn {
-        width: 160px;
+    button {
+        min-width: 70px;
     }
 }
 

@@ -70,13 +70,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropBtn = document.getElementById('drop-btn');
 
     // 캔버스 크기 설정
-    ctx.canvas.width = COLS * BLOCK_SIZE;
-    ctx.canvas.height = ROWS * BLOCK_SIZE;
-    ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+    function resizeCanvas() {
+        const gameBoard = document.querySelector('.game-board');
+        const boardWidth = gameBoard.clientWidth;
+        const boardHeight = gameBoard.clientHeight;
+        
+        // 게임 보드 캔버스 크기 설정
+        canvas.width = boardWidth;
+        canvas.height = boardHeight;
+        BLOCK_SIZE = boardWidth / COLS;
+        ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+        
+        // 다음 블록 캔버스 크기 설정
+        const nextCanvas = document.getElementById('next-canvas');
+        nextCanvas.width = 100;
+        nextCanvas.height = 100;
+        nextCtx.scale(25, 25);
+    }
 
-    nextCtx.canvas.width = 4 * BLOCK_SIZE;
-    nextCtx.canvas.height = 4 * BLOCK_SIZE;
-    nextCtx.scale(BLOCK_SIZE, BLOCK_SIZE);
+    // 초기 캔버스 크기 설정
+    resizeCanvas();
+
+    // 화면 크기 변경 시 캔버스 크기 조정
+    window.addEventListener('resize', resizeCanvas);
 
     // 모바일 컨트롤 토글
     let isMobileControl = false;
