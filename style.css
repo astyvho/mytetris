@@ -14,331 +14,163 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* fallback */
-    min-height: calc(var(--vh, 1vh) * 100);
+    min-height: 100vh;
     margin: 0;
     background-color: #f0f0f0;
     touch-action: none;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     width: 100%;
     overflow: hidden;
-    position: fixed;
-    left: 0;
-    top: 0;
 }
 
 .container {
-    max-width: 100%;
     width: 100%;
-    height: 100vh;
-    height: calc(var(--vh, 1vh) * 100);
+    max-width: 800px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.game-info {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    font-size: 14px;
+    min-width: 80px;
+}
+
+.game-info > div {
+    display: flex;
+    gap: 8px;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 20px;
-    padding-top: max(20px, env(safe-area-inset-top));
-    padding-bottom: max(20px, env(safe-area-inset-bottom));
 }
 
 .game-area {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-}
-
-.game-info {
-    position: relative;
-    width: 100%;
-    max-width: 500px;
-    display: flex;
-    justify-content: space-around;
-    background: rgba(240, 240, 240, 0.95);
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    font-size: clamp(12px, 2.5vw, 16px);
-    text-align: center;
-}
-
-h1 {
-    font-size: 24px;
-    text-align: center;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #555;
-}
-
-.score-container {
-    background-color: #f8f8f8;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    font-size: clamp(12px, 2.5vw, 14px);
-}
-
-.score-container p {
-    margin: 5px 0;
-    font-size: 16px;
+    gap: 20px;
 }
 
 .game-board {
-    width: min(85vw, 400px);
+    width: min(100%, 400px);
     aspect-ratio: 1/2;
     border: 2px solid #555;
-    border-radius: 5px;
+    border-radius: 4px;
     background-color: #2a2a2a;
-    margin: 10px 0;
-}
-
-#board {
-    width: 100%;
-    height: 100%;
-}
-
-canvas {
-    display: block;
-}
-
-#next-canvas {
-    background-color: #4a4a4a;
-    border: 1px solid #333;
-    border-radius: 3px;
-    width: 100px;
-    height: 100px;
-}
-
-#level {
-    font-weight: bold;
-    color: #4CAF50;
-    font-size: 20px;
-}
-
-.next-piece, #next-canvas {
-    display: none !important;
 }
 
 .controls {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     gap: 10px;
-    margin: 10px 0;
+    min-width: 80px;
+}
+
+.controls button {
     width: 100%;
-    max-width: 500px;
+    padding: 8px;
+    font-size: 13px;
+}
+
+button {
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    touch-action: manipulation;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+#pause-button {
+    background-color: #f44336;
 }
 
 .mobile-controls {
+    width: 100%;
+    max-width: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    margin-top: 10px;
-    width: 100%;
-    max-width: 500px;
 }
 
 .control-row {
     display: flex;
     justify-content: center;
-    gap: 10px;
-}
-
-button {
-    padding: 10px 20px;
-    font-size: clamp(12px, 2.5vw, 14px);
-    cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    touch-action: manipulation;
-    min-width: 80px;
+    gap: 8px;
 }
 
 .control-row button {
-    width: clamp(40px, 8vw, 50px);
-    height: clamp(40px, 8vw, 50px);
+    width: 45px;
+    height: 45px;
     padding: 0;
-    font-size: clamp(16px, 3vw, 20px);
-    min-width: unset;
+    font-size: 18px;
+    background-color: #4CAF50;
 }
 
 #rotate-btn {
     background-color: #FF9800;
 }
 
-#rotate-btn:hover {
-    background-color: #F57C00;
-}
-
 #drop-btn {
-    width: clamp(120px, 25vw, 160px);
+    width: 120px;
+    height: 35px;
+    background-color: #F44336;
+    margin-top: 5px;
 }
 
-#drop-btn:hover {
-    background-color: #D32F2F;
-}
-
-/* 가로 모드 처리 */
-@media (orientation: landscape) {
+/* 모바일 대응 */
+@media (max-width: 768px) {
     .container {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
-        gap: 20px;
+        padding: 10px;
+        gap: 15px;
     }
 
-    .game-board {
-        width: min(40vw, 350px);
-        margin: 0;
+    .game-info {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        font-size: 13px;
+        min-width: unset;
     }
 
-    .mobile-controls {
-        margin: 0;
+    .controls {
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        min-width: unset;
+        gap: 8px;
+    }
+
+    .controls button {
+        width: auto;
+        padding: 6px 12px;
+    }
+
+    .control-row button {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    #drop-btn {
+        width: 110px;
+        height: 32px;
     }
 }
 
 /* iOS Safari 대응 */
 @supports (-webkit-touch-callout: none) {
     .container {
-        min-height: -webkit-fill-available;
-    }
-}
-
-@media (max-width: 768px) {
-    body {
-        height: calc(var(--vh, 1vh) * 100);
-        padding: env(safe-area-inset-top) 5px env(safe-area-inset-bottom) 5px;
-        overflow: hidden;
-        align-items: flex-start;
-    }
-    
-    .container {
-        margin: 0 auto;
-        padding: calc(env(safe-area-inset-top) + 150px) 3px calc(env(safe-area-inset-bottom) + 10px);
-        height: 100%;
-        justify-content: flex-start;
-        gap: 15px;
-    }
-
-    .game-info {
-        position: fixed;
-        top: calc(env(safe-area-inset-top) + 40px);
-        left: 0;
-        right: 0;
-        background: rgba(240, 240, 240, 0.95);
-        padding: 15px;
-        z-index: 100;
-        margin-bottom: 0;
-        text-align: center;
-    }
-
-    .game-board {
-        margin: 20px 0;
-        max-height: calc((var(--vh, 1vh) * 100) - 350px);
-        width: 85%;
-    }
-
-    .mobile-controls {
-        margin-top: 20px;
-        padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
-    }
-}
-
-/* iOS Safari에서 가로 모드일 때의 처리 */
-@media (max-width: 926px) and (orientation: landscape) {
-    .container {
-        padding-top: calc(env(safe-area-inset-top) + 60px);
-        padding-bottom: calc(env(safe-area-inset-bottom) + 5px);
-    }
-
-    .game-info {
-        top: calc(env(safe-area-inset-top) + 10px);
-        padding: 8px;
-    }
-
-    .game-board {
-        max-height: calc((var(--vh, 1vh) * 100) - 180px);
-        width: 45%;
-        margin-top: 30px;
-    }
-
-    .mobile-controls {
-        transform: scale(0.8);
-        margin-top: 10px;
-    }
-}
-
-@media (max-height: 600px) {
-    .game-info {
-        font-size: clamp(10px, 2vw, 12px);
-    }
-    
-    .score-container {
-        padding: 5px;
-    }
-    
-    .controls button {
-        padding: 5px 10px;
-        font-size: clamp(10px, 2vw, 12px);
-    }
-    
-    .next-piece {
-        display: none;
-    }
-
-    .mobile-controls {
-        margin-top: 5px;
-    }
-
-    .control-row {
-        margin: 3px 0;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        padding: 5px;
-    }
-
-    .controls {
-        gap: 5px;
-    }
-
-    button {
-        min-width: 70px;
-    }
-}
-
-@media (max-width: 600px) {
-    .container {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .game-info {
-        width: 100%;
-        order: 2;
-    }
-    
-    .game-board {
-        order: 1;
-    }
-
-    .controls {
-        order: 3;
-    }
-
-    .mobile-controls {
-        order: 4;
+        height: -webkit-fill-available;
     }
 } 
